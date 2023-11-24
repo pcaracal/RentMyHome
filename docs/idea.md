@@ -1,0 +1,15 @@
+# Idea
+- Fullstack web-application
+- Users can log in and log out
+- Logged in users can create listings for their Homes
+- Listing:
+    - images
+    - price
+    - interactive calendar to show availability
+    - contact data
+    - redirect to buy page
+    - rating (can sort by them)
+- Security:
+    - JWT for authentication
+    - No need to think about XSS because of Angular 17
+
