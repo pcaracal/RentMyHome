@@ -21,8 +21,15 @@ export class RentComponent implements OnInit {
     price: number,
     description: string,
     image: string,
-    is_rented: boolean
   } = {} as any;
+
+  bookings: {
+    id: number,
+    fk_room_id: number,
+    fk_user_id: number,
+    start_date: string,
+    end_date: string,
+  }[] = [];
 
   constructor(private apiService: ApiService, private router: Router) {
   }
@@ -30,5 +37,6 @@ export class RentComponent implements OnInit {
   ngOnInit() {
     this.rent_id = parseInt(<string>window.location.href.split('/').pop());
     this.rentData = this.apiService.getRoom(this.rent_id);
+    this.bookings = this.apiService.getBookings(this.rent_id);
   }
 }

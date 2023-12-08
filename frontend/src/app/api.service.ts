@@ -32,8 +32,7 @@ export class ApiService {
           name: 'Room 1',
           price: 100,
           description: 'Room 1 description',
-          image: 'https://http.cat/100.jpg',
-          is_rented: false
+          image: 'https://http.cat/100.jpg'
         };
       case 2:
         return {
@@ -41,8 +40,7 @@ export class ApiService {
           name: 'Room 2',
           price: 200,
           description: 'Room 2 description',
-          image: 'https://http.cat/101.jpg',
-          is_rented: true
+          image: 'https://http.cat/101.jpg'
         };
       case 3:
         return {
@@ -50,8 +48,7 @@ export class ApiService {
           name: 'Room 3',
           price: 300,
           description: 'Room 3 description',
-          image: 'https://http.cat/102.jpg',
-          is_rented: false
+          image: 'https://http.cat/102.jpg'
         };
       case 4:
         return {
@@ -59,8 +56,7 @@ export class ApiService {
           name: 'Room 4',
           price: 400,
           description: 'Room 4 description',
-          image: 'https://http.cat/200.jpg',
-          is_rented: true
+          image: 'https://http.cat/200.jpg'
         };
       case 5:
         return {
@@ -68,8 +64,7 @@ export class ApiService {
           name: 'Room 5',
           price: 500,
           description: 'Room 5 description',
-          image: 'https://http.cat/201.jpg',
-          is_rented: false
+          image: 'https://http.cat/201.jpg'
         };
       default:
         return {
@@ -77,10 +72,100 @@ export class ApiService {
           name: 'Room 0',
           price: 0,
           description: 'Room 0 description',
-          image: 'https://http.cat/404.jpg',
-          is_rented: true
+          image: 'https://http.cat/404.jpg'
         };
     }
+  }
 
+  getBookings(id: number) { // TODO: /api/bookings
+    switch (id) {
+      case 1:
+        return [
+          {
+            id: 1,
+            fk_room_id: 1,
+            fk_user_id: 1,
+            start_date: '2023-12-01',
+            end_date: '2023-12-02',
+          },
+          {
+            id: 2,
+            fk_room_id: 1,
+            fk_user_id: 1,
+            start_date: '2023-12-04',
+            end_date: '2023-12-10',
+          }
+        ];
+      case 2:
+        return [
+          {
+            id: 3,
+            fk_room_id: 2,
+            fk_user_id: 1,
+            start_date: '2023-12-01',
+            end_date: '2023-12-02',
+          },
+          {
+            id: 4,
+            fk_room_id: 2,
+            fk_user_id: 1,
+            start_date: '2023-12-04',
+            end_date: '2023-12-10',
+          }
+        ];
+      case 3:
+        return [
+          {
+            id: 5,
+            fk_room_id: 3,
+            fk_user_id: 1,
+            start_date: '2023-12-01',
+            end_date: '2023-12-02',
+          },
+          {
+            id: 6,
+            fk_room_id: 3,
+            fk_user_id: 1,
+            start_date: '2023-12-04',
+            end_date: '2023-12-10',
+          }
+        ];
+      case 4:
+        return [
+          {
+            id: 7,
+            fk_room_id: 4,
+            fk_user_id: 1,
+            start_date: '2023-12-01',
+            end_date: '2023-12-02',
+          },
+          {
+            id: 8,
+            fk_room_id: 4,
+            fk_user_id: 1,
+            start_date: '2023-12-04',
+            end_date: '2023-12-10',
+          }
+        ];
+      case 5:
+        return [
+          {
+            id: 9,
+            fk_room_id: 5,
+            fk_user_id: 1,
+            start_date: '2023-12-01',
+            end_date: '2023-12-02',
+          },
+          {
+            id: 10,
+            fk_room_id: 5,
+            fk_user_id: 1,
+            start_date: '2023-12-04',
+            end_date: '2023-12-10',
+          }
+        ];
+      default:
+        return []
+    }
   }
 }
