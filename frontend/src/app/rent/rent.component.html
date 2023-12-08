@@ -1,2 +1,44 @@
-<p>rent works!</p>
-<p>Rent id: {{rent_id}}</p>
+<h1>{{rentData.name}}</h1>
+<sub>Owner: {{owner.name}}</sub>
+<hr>
+<div class="grid">
+  <div>
+    <img src="{{rentData.image}}" alt="rent image">
+  </div>
+  <div>
+    <h1>Information</h1>
+
+    <div *ngIf="rentData.is_rented">
+      <hr>
+      <p class="rented">This home is currently unavailable</p>
+    </div>
+
+    <hr>
+    <p>Description: {{rentData.description}}</p>
+
+    <hr>
+    <p>Price: {{rentData.price}}</p>
+
+    <hr>
+    <p>
+      Address: {{rentData.address}}
+      <br>
+      City: {{rentData.city}}
+      <br>
+      Zip: {{rentData.zip}}
+    </p>
+
+
+    <hr>
+    <p>
+      Owner: {{owner.name}}
+      <br>
+      Email: <a href="mailto:{{owner.email}}">{{owner.email}}</a>
+    </p>
+
+    <div class="grid">
+      <button type="button" class="outline" [class.secondary]="rentData.is_rented">Rent</button>
+      <button type="button" class="primary outline">Contact owner</button>
+    </div>
+  </div>
+</div>

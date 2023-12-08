@@ -39,10 +39,41 @@ export class ApiService {
     for (let i = 0; i < usernames.length; i++) {
       users.push({
         id: i + 1,
-        name: usernames[i]
+        name: usernames[i],
+        email: usernames[i] + "@catmail.com"
       });
     }
 
     return users;
+  }
+
+  getHome(id: number) {// TODO: /api/home/:id
+    if (id === 1) {
+      return {
+        id: 1,
+        name: 'Home 1',
+        price: 100,
+        description: 'Home 1 description',
+        image: 'https://http.cat/100.jpg',
+        fk_user_id: 1,
+        address: '1234 Cat Street',
+        city: 'Zürich',
+        zip: '8001',
+        is_rented: false
+      };
+    } else {
+      return {
+        id: 2,
+        name: 'Home 2',
+        price: 200,
+        description: 'Home 2 description',
+        image: 'https://http.cat/200.jpg',
+        fk_user_id: 2,
+        address: '1234 Cat Street',
+        city: 'Zürich',
+        zip: '8001',
+        is_rented: true
+      };
+    }
   }
 }
