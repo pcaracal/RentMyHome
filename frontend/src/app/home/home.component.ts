@@ -13,26 +13,20 @@ import {ApiService} from "../api.service";
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  homes: {
+  rooms: {
     id: number,
     name: string,
     price: number,
     description: string,
     image: string,
-    fk_user_id: number,
-  }[] = [];
-
-  users: {
-    id: number,
-    name: string
+    is_rented: boolean
   }[] = [];
 
   constructor(private router: Router, private apiService: ApiService) {
   }
 
   ngOnInit() {
-    this.users = this.apiService.getUsers();
-    this.homes = this.apiService.getHomes();
+    this.rooms = this.apiService.getRooms();
   }
 
 

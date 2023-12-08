@@ -1,5 +1,4 @@
 <h1>{{rentData.name}}</h1>
-<sub>Owner: {{owner.name}}</sub>
 <hr>
 <div class="grid">
   <div>
@@ -10,7 +9,7 @@
 
     <div *ngIf="rentData.is_rented">
       <hr>
-      <p class="rented">This home is currently unavailable</p>
+      <p class="rented">This room is currently unavailable</p>
     </div>
 
     <hr>
@@ -19,26 +18,8 @@
     <hr>
     <p>Price: {{rentData.price}}</p>
 
-    <hr>
-    <p>
-      Address: {{rentData.address}}
-      <br>
-      City: {{rentData.city}}
-      <br>
-      Zip: {{rentData.zip}}
-    </p>
-
-
-    <hr>
-    <p>
-      Owner: {{owner.name}}
-      <br>
-      Email: <a href="mailto:{{owner.email}}">{{owner.email}}</a>
-    </p>
-
     <div class="grid">
       <button type="button" class="outline" [class.secondary]="rentData.is_rented">Rent</button>
-      <button type="button" class="primary outline">Contact owner</button>
     </div>
   </div>
 </div>

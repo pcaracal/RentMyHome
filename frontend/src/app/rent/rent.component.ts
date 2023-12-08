@@ -21,17 +21,7 @@ export class RentComponent implements OnInit {
     price: number,
     description: string,
     image: string,
-    fk_user_id: number
-    address: string,
-    city: string,
-    zip: string,
     is_rented: boolean
-  } = {} as any;
-
-  owner: {
-    id: number,
-    name: string,
-    email: string
   } = {} as any;
 
   constructor(private apiService: ApiService, private router: Router) {
@@ -39,7 +29,6 @@ export class RentComponent implements OnInit {
 
   ngOnInit() {
     this.rent_id = parseInt(<string>window.location.href.split('/').pop());
-    this.rentData = this.apiService.getHome(this.rent_id);
-    this.owner = this.apiService.getUsers()[this.rentData.fk_user_id - 1];
+    this.rentData = this.apiService.getRoom(this.rent_id);
   }
 }

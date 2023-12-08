@@ -1,15 +1,14 @@
 <div class="grid">
-  <article *ngFor="let home of homes" (click)="selectHome(home.id)">
+  <article *ngFor="let room of rooms" (click)="selectHome(room.id)">
     <header>
-      {{home.name}}
+      {{room.name}}
     </header>
     <body>
-    <img src="{{home.image}}" alt="home image">
+    <img src="{{room.image}}" alt="room image">
     </body>
     <footer>
-      <p>{{home.description}}</p>
-      <p class="username">{{users[home.fk_user_id - 1].name}}</p>
-      <p class="price">CHF {{home.price}} / Night</p>
+      <p>{{room.description}}</p>
+      <p class="price">CHF {{room.price}} / Night</p>
     </footer>
   </article>
 </div>
