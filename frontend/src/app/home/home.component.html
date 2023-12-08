@@ -1,0 +1,17 @@
+<p>home works!</p>
+<div class="grid">
+  <article *ngFor="let home of homes">
+    <header>
+      {{home.name}}
+    </header>
+    <body>
+    <img src="{{home.image}}" alt="home image">
+    </body>
+    <footer>
+      {{home.description}}
+      <br>
+      <br>
+      <strong>{{home.price}} CHF</strong>
+    </footer>
+  </article>
+</div>

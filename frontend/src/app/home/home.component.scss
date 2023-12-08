@@ -1,0 +1,18 @@
+div.grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  article {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    header {
+      text-align: center;
+      font-family: "Inter Extra Bold", sans-serif;
+      font-size: 1rem;
+    }
+
+    footer {
+    }
+  }
+}
