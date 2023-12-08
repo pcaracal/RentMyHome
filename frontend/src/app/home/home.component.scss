@@ -1,5 +1,5 @@
 div.grid {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 
   article {
     display: flex;
@@ -9,10 +9,28 @@ div.grid {
     header {
       text-align: center;
       font-family: "Inter Extra Bold", sans-serif;
-      font-size: 1rem;
+      font-size: 1.5rem;
     }
 
     footer {
+    }
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0 0 0 1px #666, 0 0 0 2px #555, 0 0 0 3px #444, 0 0 0 4px #333, 0 0 0 5px #222;
+      transition: box-shadow 0.4s ease-in-out;
+    }
+
+    .username {
+      text-align: center;
+    }
+
+
+    .price {
+      text-align: center;
+      margin-bottom: 0;
+      color: #94e2d5 !important;
+      font-family: "Inter Extra Bold", sans-serif;
     }
   }
 }

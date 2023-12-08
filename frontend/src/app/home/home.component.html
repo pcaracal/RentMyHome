@@ -1,6 +1,5 @@
-<p>home works!</p>
 <div class="grid">
-  <article *ngFor="let home of homes">
+  <article *ngFor="let home of homes" (click)="selectHome(home.id)">
     <header>
       {{home.name}}
     </header>
@@ -8,10 +7,9 @@
     <img src="{{home.image}}" alt="home image">
     </body>
     <footer>
-      {{home.description}}
-      <br>
-      <br>
-      <strong>{{home.price}} CHF</strong>
+      <p>{{home.description}}</p>
+      <p class="username">{{users[home.fk_user_id - 1].name}}</p>
+      <p class="price">CHF {{home.price}} / Night</p>
     </footer>
   </article>
 </div>

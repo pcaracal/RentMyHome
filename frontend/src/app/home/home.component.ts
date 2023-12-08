@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForOf} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -16,14 +17,31 @@ export class HomeComponent implements OnInit {
     name: string,
     price: number,
     description: string,
-    image: string
+    image: string,
+    fk_user_id: number,
   }[] = [];
 
-  constructor() {
+  users: {
+    id: number,
+    name: string
+  }[] = [];
+
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
+    this.setUsers();
     this.setHomes();
+  }
+
+  setUsers() {
+    const usernames: string[] = ["User1", "User2", "User3", "User4"];
+    for (let i = 0; i < usernames.length; i++) {
+      this.users.push({
+        id: i + 1,
+        name: usernames[i]
+      });
+    }
   }
 
   setHomes() {
@@ -33,14 +51,22 @@ export class HomeComponent implements OnInit {
     let index = 1;
     cats.forEach(cat => {
       this.homes.push({
-        id: cat,
+        id: index,
         name: 'Home ' + cat,
-        price: cat * 1000,
+        price: cat,
         description: 'Home ' + cat + ' description',
         image: 'https://http.cat/' + cat + '.jpg',
+        fk_user_id: this.users[index % 4].id
       });
+
+      console.log(this.homes[index - 1]);
 
       index++;
     });
+  }
+
+  selectHome(id: number) {
+    // Redirect to /rent/:id
+    this.router.navigate(['/rent', id]).then(r => console.log(r));
   }
 }
