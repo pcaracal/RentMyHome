@@ -1,0 +1,43 @@
+.calendar {
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  table {
+    text-align: center;
+  }
+
+  span {
+    font-family: "JetBrainsMono NF ExtraBold", monospace;
+  }
+
+  .date-booked {
+    span {
+      color: #f38ba8 !important;
+    }
+  }
+
+  .date-available {
+    span {
+      color: #a8f38b !important;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .date-other-month {
+    span {
+      font-family: "JetBrainsMono NF ExtraLight", monospace !important;
+    }
+  }
+
+  td.date-today {
+    border: 2px solid #cba6f7 !important;
+  }
+}

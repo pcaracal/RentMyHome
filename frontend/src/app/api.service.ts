@@ -20,7 +20,6 @@ export class ApiService {
       rooms.push(this.getRoom(i));
     }
 
-
     return rooms;
   }
 
@@ -69,9 +68,9 @@ export class ApiService {
       default:
         return {
           id: -1,
-          name: 'Room 0',
-          price: 0,
-          description: 'Room 0 description',
+          name: 'Room not found.',
+          price: -1,
+          description: '-',
           image: 'https://http.cat/404.jpg'
         };
     }
@@ -93,7 +92,7 @@ export class ApiService {
             fk_room_id: 1,
             fk_user_id: 1,
             start_date: '2023-12-04',
-            end_date: '2023-12-10',
+            end_date: '2023-12-18',
           }
         ];
       case 2:

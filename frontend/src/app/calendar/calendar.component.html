@@ -1,0 +1,42 @@
+<div class="calendar">
+  <div class="container">
+    <article>
+      <header>
+        <h1>Select date and duration</h1>
+      </header>
+      <body>
+      <table>
+        <thead>
+        <tr>
+          <th colspan="7"><h3>{{ calendarData.month }} {{ calendarData.year }}</h3>
+          </th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let week of weeks">
+          <td *ngFor="let day of week.days" [class]="day.today ? 'date-today' : ''">
+            <div [class]="day.booked || day.past ? 'date-booked' : 'date-available'">
+              <div [class]=" day.isOtherMonth ? 'date-other-month' : ''">
+              <span>
+                {{ day.date }}
+              </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      </body>
+    </article>
+  </div>
+</div>

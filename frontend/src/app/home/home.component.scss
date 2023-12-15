@@ -17,8 +17,12 @@ div.grid {
 
     &:hover {
       cursor: pointer;
-      box-shadow: 0 0 0 1px #666, 0 0 0 2px #555, 0 0 0 3px #444, 0 0 0 4px #333, 0 0 0 5px #222;
-      transition: box-shadow 0.4s ease-in-out;
+      transform: scale(1.025);
+      transition: 0.15s ease-in-out;
+    }
+
+    &:not(hover) {
+      transition: 0.15s ease-in-out;
     }
 
     .username {
