@@ -47,5 +47,39 @@
       </table>
       </body>
     </article>
+
+    <article *ngIf="hasSelectedDate">
+      <header>
+        <h1>Payment</h1>
+      </header>
+      <body>
+      <table>
+        <thead>
+        <tr>
+          <th>Start Date</th>
+          <th>Amount of days</th>
+          <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><strong>
+            {{
+              selectedDate
+            }}.{{
+              selectedMonth + 1 != 13 ?
+                selectedMonth + 1 : selectedMonth - 11
+            }}.{{
+              selectedYear
+            }}
+          </strong></td>
+          <td><strong>{{ amountOfDays }}</strong></td>
+          <td><strong>{{ amountOfDays * 100 }}CHF</strong></td>
+      </table>
+      </body>
+      <footer>
+        <button (click)="makePayment(amountOfDays*100)">Book</button>
+      </footer>
+    </article>
   </div>
 </div>

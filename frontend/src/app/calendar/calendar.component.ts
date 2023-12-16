@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ApiService} from "../api.service";
-import {NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
 @Component({
@@ -10,13 +10,55 @@ import {FormsModule} from "@angular/forms";
   imports: [
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    DatePipe
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent implements OnInit {
+  // stripe thing
+  paymentHandler: any = null;
+  stripeAPIKey: string = 'pk_test_51OO43KAjte1PgIiQDiM43Emt9SSsH8UH0IRyDgWgpS6Wq4Hvd97hEMSyhi7OvHSSjfpkLGVgxcmhG0IHWVcDhVm300b2Dl9SNY';
+
+  invokeStripe() {
+    if (!window.document.getElementById('stripe-script')) {
+      const script = window.document.createElement('script');
+      script.id = 'stripe-script';
+      script.type = 'text/javascript';
+      script.src = 'https://checkout.stripe.com/checkout.js';
+      script.onload = () => {
+        this.paymentHandler = (<any>window).StripeCheckout.configure({
+          key: this.stripeAPIKey,
+          locale: 'auto',
+          token: function (stripeToken: any) {
+            console.log(stripeToken);
+            // alert('Payment has been successfull!');
+          },
+        });
+      };
+      window.document.body.appendChild(script);
+    }
+  }
+
+  makePayment(amount: any) {
+    const paymentHandler = (<any>window).StripeCheckout.configure({
+      key: this.stripeAPIKey,
+      locale: 'auto',
+      token: function (stripeToken: any) {
+        console.log(stripeToken);
+        // alert('Stripe token generated!');
+      },
+    });
+    paymentHandler.open({
+      name: 'Sandcat AG Room Rental',
+      description: 'Room Rental',
+      amount: amount * 100,
+    });
+  }
+
+
   rentId: number = -1;
   bookings: {
     id: number,
@@ -52,16 +94,22 @@ export class CalendarComponent implements OnInit {
     }[]
   }[] = [];
 
+  hasSelectedDate: boolean = false;
   selectedDate: number = 0;
   amountOfDays: number = 1;
   maxAmountOfDays: number = 7;
   selectedMonth: number = 0;
+  selectedYear: number = 0;
 
 
   constructor(private apiService: ApiService, private router: Router) {
   }
 
   ngOnInit() {
+    // stripe
+    this.invokeStripe();
+
+
     let url = window.location.href.split('/');
     let id = url.indexOf('rent');
 
@@ -109,11 +157,13 @@ export class CalendarComponent implements OnInit {
       });
       day.setDate(day.getDate() + 1);
     }
+    this.selectedYear = this.calendarData.year;
   }
 
   isBooked(day: Date) {
     for (let booking of this.bookings) {
       let start = new Date(booking.start_date);
+      start.setDate(start.getDate() - 1);
       let end = new Date(booking.end_date);
       if (day >= start && day <= end) {
         return true;
@@ -139,10 +189,6 @@ export class CalendarComponent implements OnInit {
     let end = new Date(start);
     end.setDate(start.getDate() + this.amountOfDays - 1);
     let date = new Date(this.calendarData.year, month, day);
-
-    console.log("------")
-    console.log("Start: " + start)
-    console.log("End: " + end)
     if (start.getMonth() !== end.getMonth()) {
       if (date.getMonth() === start.getMonth()) {
         return date >= start && date <= new Date(this.calendarData.year, start.getMonth() + 1, 0);
@@ -150,7 +196,6 @@ export class CalendarComponent implements OnInit {
         return date >= new Date(this.calendarData.year, end.getMonth(), 1) && date <= end;
       }
     }
-
     return date >= start && date <= end;
   }
 
@@ -158,8 +203,13 @@ export class CalendarComponent implements OnInit {
     if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
     }
+    this.hasSelectedDate = true;
+    this.selectedYear = this.calendarData.year;
 
-    console.log("Selected date, month: " + day + ", " + month)
+    if (month === 12 && this.calendarData.month === "December") {
+      this.selectedYear++;
+    }
+
     this.selectedMonth = month;
     this.selectedDate = day;
   }
