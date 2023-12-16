@@ -1,0 +1,91 @@
+<div class="calendar">
+  <div class="container">
+    <article>
+      <header class="calendar-header">
+        <h1>Select date and duration</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 384 512" class="x-button"
+             (click)="closeCalendar()">
+          <path
+            d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"/>
+        </svg>
+      </header>
+      <body>
+      <div style="display: flex; justify-content: space-between">
+        <input style="width: 80%" type="range" min="1" [max]="maxAmountOfDays" [(ngModel)]="amountOfDays"
+               (change)="changeAmountOfDays($event)">
+        <span *ngIf="maxAmountOfDays > 1">{{ amountOfDays }} / {{ maxAmountOfDays }} Days</span>
+        <span *ngIf="maxAmountOfDays === 1">{{ amountOfDays }} / {{ maxAmountOfDays }} Day</span>
+      </div>
+      <table>
+        <thead>
+        <tr>
+          <th colspan="7"><h3>{{ calendarData.month }} {{ calendarData.year }}</h3>
+          </th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let week of weeks">
+          <td *ngFor="let day of week.days"
+              [class]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' : ''"
+              (click)="selectDate(day.dateYear, day.dateMonth, day.dateDate)">
+            <div [classList]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' :''">
+            </div>
+            <div [class]="day.booked || day.past ? 'date-booked' : 'date-available'">
+              <div [class]=" day.isOtherMonth ? 'date-other-month' : ''">
+              <span>
+                {{ day.date }}
+              </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+      </body>
+    </article>
+
+    <article *ngIf="hasSelectedDate">
+      <header>
+        <h1>Payment</h1>
+      </header>
+      <body>
+      <table>
+        <thead>
+        <tr>
+          <th>Start Date</th>
+          <th>Amount of days</th>
+          <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><strong>
+            {{
+              selectedDate
+            }}.{{
+              selectedMonth + 1 != 13 ?
+                selectedMonth + 1 : selectedMonth - 11
+            }}.{{
+              selectedYear
+            }}
+          </strong></td>
+          <td><strong>{{ amountOfDays }}</strong></td>
+          <td><strong>{{ amountOfDays * 100 }} CHF</strong></td>
+      </table>
+      </body>
+      <footer>
+        <button (click)="makePayment(amountOfDays*100)">Book</button>
+      </footer>
+    </article>
+  </div>
+</div>
