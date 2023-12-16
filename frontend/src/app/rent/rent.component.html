@@ -15,7 +15,7 @@
     <p>Price: {{ rentData.price }}</p>
 
     <div class="grid">
-      <button type="button" class="outline" [class.secondary]="isBooked()">
+      <button type="button" class="outline" [class.secondary]="isBooked()" (click)="clickRent()">
         <strong style="display: flex; align-items: center; justify-content: space-between ">
           Rent
           <svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512">

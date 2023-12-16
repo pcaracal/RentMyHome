@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../api.service";
-import {Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {CalendarComponent} from "../calendar/calendar.component";
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-rent',
@@ -50,6 +51,14 @@ export class RentComponent implements OnInit {
     this.bookings = this.apiService.getBookings(this.rent_id);
 
     this.showCalendar = url.pop() === 'calendar';
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      const url = this.router.url.split('/');
+      const id = url.indexOf('calendar');
+      this.showCalendar = id !== -1;
+    });
   }
 
   isBooked() {
@@ -62,5 +71,9 @@ export class RentComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  clickRent() {
+    this.router.navigate(['/rent/' + this.rent_id + '/calendar']);
   }
 }

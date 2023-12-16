@@ -33,7 +33,7 @@ export class CalendarComponent implements OnInit {
           key: this.stripeAPIKey,
           locale: 'auto',
           token: function (stripeToken: any) {
-            console.log(stripeToken);
+            // console.log(stripeToken);
             // alert('Payment has been successfull!');
           },
         });
@@ -48,7 +48,7 @@ export class CalendarComponent implements OnInit {
       locale: 'auto',
       token: function (stripeToken: any) {
         console.log(stripeToken);
-        // alert('Stripe token generated!');
+        // TODO: Send token to backend for processing
       },
     });
     paymentHandler.open({
@@ -212,5 +212,9 @@ export class CalendarComponent implements OnInit {
 
     this.selectedMonth = month;
     this.selectedDate = day;
+  }
+
+  closeCalendar() {
+    this.router.navigate(['/rent/' + this.rentId]);
   }
 }

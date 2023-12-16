@@ -8,6 +8,26 @@
   width: 100%;
   height: 100%;
 
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .x-button {
+      cursor: pointer;
+
+      &:hover {
+        color: #89b4fa;
+        transform: scale(1.2);
+        transition: 0.1s ease-in-out;
+      }
+
+      &:not(:hover) {
+        transition: 0.1s ease-in-out;
+      }
+    }
+  }
+
   table {
     text-align: center;
   }
