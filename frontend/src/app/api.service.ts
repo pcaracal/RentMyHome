@@ -77,6 +77,7 @@ export class ApiService {
   }
 
   getBookings(id: number) { // TODO: /api/bookings
+    // console.log('getBookings', id)
     switch (id) {
       case 1:
         return [
@@ -131,6 +132,13 @@ export class ApiService {
             fk_user_id: 1,
             start_date: '2023-12-04',
             end_date: '2023-12-10',
+          },
+          {
+            id: 14,
+            fk_room_id: 2,
+            fk_user_id: 1,
+            start_date: '2023-12-23',
+            end_date: '2023-12-25',
           }
         ];
       case 3:

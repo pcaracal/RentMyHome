@@ -123,6 +123,13 @@ export class CalendarComponent implements OnInit {
 
     this.rentId = parseInt(url[id + 1]);
     this.bookings = this.apiService.getBookings(this.rentId);
+    this.bookings.push({
+      id: 0,
+      fk_room_id: 0,
+      fk_user_id: 0,
+      start_date: '2000-01-01',
+      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    });
 
     this.setCalendarData();
 
