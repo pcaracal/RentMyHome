@@ -77,6 +77,7 @@ export class CalendarComponent implements OnInit {
       isOtherMonth: boolean,
       dateDate: number,
       dateMonth: number
+      dateYear: number
     }[],
     month: string,
     year: number
@@ -87,6 +88,7 @@ export class CalendarComponent implements OnInit {
       date: number,
       dateDate: number,
       dateMonth: number,
+      dateYear: number,
       booked: boolean,
       today: boolean,
       past: boolean,
@@ -100,6 +102,8 @@ export class CalendarComponent implements OnInit {
   maxAmountOfDays: number = 7;
   selectedMonth: number = 0;
   selectedYear: number = 0;
+
+  tempAmountOfDays: number = 1;
 
 
   constructor(private apiService: ApiService, private router: Router) {
@@ -136,7 +140,7 @@ export class CalendarComponent implements OnInit {
 
   setCalendarData() {
     let today = new Date();
-    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
+    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() - 6);
     let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
 
 
@@ -153,7 +157,8 @@ export class CalendarComponent implements OnInit {
         past: this.isPast(day),
         isOtherMonth: day.getMonth() !== today.getMonth(),
         dateDate: day.getDate(),
-        dateMonth: day.getMonth() !== today.getMonth() ? today.getMonth() + 1 : today.getMonth()
+        dateMonth: day.getMonth() !== today.getMonth() ? today.getMonth() + 1 : today.getMonth(),
+        dateYear: day.getMonth() === 11 && today.getMonth() === 11 ? today.getFullYear() + 1 : today.getFullYear()
       });
       day.setDate(day.getDate() + 1);
     }
@@ -199,7 +204,7 @@ export class CalendarComponent implements OnInit {
     return date >= start && date <= end;
   }
 
-  selectDate(month: number, day: number) {
+  selectDate(year: number, month: number, day: number) {
     if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
     }
@@ -212,9 +217,47 @@ export class CalendarComponent implements OnInit {
 
     this.selectedMonth = month;
     this.selectedDate = day;
+
+    let previousAmountOfDays = this.amountOfDays;
+
+    let nextBooking = this.getNextBooking(new Date(this.calendarData.year, month, day));
+    let start = new Date(this.calendarData.year, month, day);
+    if (nextBooking == null) {
+      this.maxAmountOfDays = 7;
+      return;
+    }
+    let daysToNextBooking = Math.round((nextBooking.getTime() - start.getTime()) / (1000 * 3600 * 24));
+    if (daysToNextBooking < 7) {
+      this.maxAmountOfDays = daysToNextBooking + 1;
+      if (previousAmountOfDays > this.maxAmountOfDays) {
+        this.amountOfDays = this.maxAmountOfDays;
+      }
+    } else {
+      this.maxAmountOfDays = 7;
+    }
+    this.tempAmountOfDays = this.amountOfDays;
   }
+
+  getNextBooking(fromDate: Date) {
+    let nextBooking = null;
+    for (let booking of this.bookings) {
+      let start = new Date(booking.start_date);
+      start.setDate(start.getDate() - 1);
+      if (start > fromDate && (nextBooking == null || start < nextBooking)) {
+        nextBooking = start;
+      }
+    }
+    return nextBooking;
+  }
+
 
   closeCalendar() {
     this.router.navigate(['/rent/' + this.rentId]);
+  }
+
+  changeAmountOfDays(amount: Event) {
+    this.amountOfDays = parseInt((amount.target as HTMLInputElement).value);
+    this.tempAmountOfDays = this.amountOfDays;
+    console.log(this.amountOfDays);
   }
 }

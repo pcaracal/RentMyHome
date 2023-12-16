@@ -93,6 +93,27 @@ export class ApiService {
             fk_user_id: 1,
             start_date: '2023-12-04',
             end_date: '2023-12-18',
+          },
+          {
+            id: 11,
+            fk_room_id: 1,
+            fk_user_id: 1,
+            start_date: '2023-12-27',
+            end_date: '2024-01-09',
+          },
+          {
+            id: 12,
+            fk_room_id: 1,
+            fk_user_id: 1,
+            start_date: '2024-01-14',
+            end_date: '2024-01-15',
+          },
+          {
+            id: 13,
+            fk_room_id: 1,
+            fk_user_id: 1,
+            start_date: '2024-01-20',
+            end_date: '2024-01-25',
           }
         ];
       case 2:
