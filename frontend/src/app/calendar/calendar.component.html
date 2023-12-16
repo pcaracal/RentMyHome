@@ -5,6 +5,11 @@
         <h1>Select date and duration</h1>
       </header>
       <body>
+      <div style="display: flex; justify-content: space-between">
+        <input style="width: 80%" type="range" min="1" [max]="maxAmountOfDays" [(ngModel)]="amountOfDays">
+        <span *ngIf="amountOfDays > 1">{{ amountOfDays }} Days</span>
+        <span *ngIf="amountOfDays == 1">{{ amountOfDays }} Day</span>
+      </div>
       <table>
         <thead>
         <tr>
@@ -25,10 +30,12 @@
         </thead>
         <tbody>
         <tr *ngFor="let week of weeks">
-          <td *ngFor="let day of week.days" [class]="day.today ? 'date-today' : ''">
+          <td *ngFor="let day of week.days" [class]="isDayInSelection(day.dateDate) ? 'date-selected' : ''">
+            <div [classList]="isDayInSelection(day.dateDate) ? 'date-selected' :''">
+            </div>
             <div [class]="day.booked || day.past ? 'date-booked' : 'date-available'">
               <div [class]=" day.isOtherMonth ? 'date-other-month' : ''">
-              <span>
+              <span (click)="selectDate(day.dateDate)">
                 {{ day.date }}
               </span>
               </div>

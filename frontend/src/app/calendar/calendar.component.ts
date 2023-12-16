@@ -1,17 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ApiService} from "../api.service";
 import {NgForOf, NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    FormsModule
   ],
   templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.scss'
+  styleUrl: './calendar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent implements OnInit {
   rentId: number = -1;
@@ -30,6 +33,8 @@ export class CalendarComponent implements OnInit {
       today: boolean,
       past: boolean,
       isOtherMonth: boolean,
+      dateDate: number,
+      dateMonth: number
     }[],
     month: string,
     year: number
@@ -38,12 +43,18 @@ export class CalendarComponent implements OnInit {
   weeks: {
     days: {
       date: number,
+      dateDate: number,
+      dateMonth: number,
       booked: boolean,
       today: boolean,
       past: boolean,
       isOtherMonth: boolean,
     }[]
   }[] = [];
+
+  selectedDate: number = 0;
+  amountOfDays: number = 1;
+  maxAmountOfDays: number = 7;
 
 
   constructor(private apiService: ApiService, private router: Router) {
@@ -61,6 +72,7 @@ export class CalendarComponent implements OnInit {
     this.bookings = this.apiService.getBookings(this.rentId);
 
     this.setCalendarData();
+
     this.calendarData.days.forEach((day, index) => {
       if (index % 7 === 0) {
         this.weeks.push({
@@ -69,12 +81,15 @@ export class CalendarComponent implements OnInit {
       }
       this.weeks[this.weeks.length - 1].days.push(day);
     });
+
+    this.selectedDate = this.calendarData.days[0].dateDate;
   }
 
   setCalendarData() {
     let today = new Date();
     let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1 - 7);
-    let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 28 - today.getDay());
+    let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 21 - today.getDay());
+
 
     this.calendarData.days = [];
     this.calendarData.month = start.toLocaleString('default', {month: 'long'});
@@ -87,7 +102,9 @@ export class CalendarComponent implements OnInit {
         booked: this.isBooked(day),
         today: this.isToday(day),
         past: this.isPast(day),
-        isOtherMonth: day.getMonth() !== today.getMonth()
+        isOtherMonth: day.getMonth() !== today.getMonth(),
+        dateDate: day.getDate(),
+        dateMonth: day.getMonth(),
       });
       day.setDate(day.getDate() + 1);
     }
@@ -114,5 +131,25 @@ export class CalendarComponent implements OnInit {
   isPast(day: Date) {
     let today = new Date();
     return day < today;
+  }
+
+  isDayInSelection(day: number) {
+    let start = this.selectedDate;
+    let end = this.selectedDate;
+    if (start > end) {
+      let temp = start;
+      start = end;
+      end = temp;
+    }
+    // console.log(day.getDate(), start, end);
+    return day >= start && day <= end;
+  }
+
+  selectDate(day: number) {
+    if (this.isBooked(new Date(this.calendarData.year, this.calendarData.month, day))) {
+      return;
+    }
+    console.log(day)
+    this.selectedDate = day;
   }
 }
