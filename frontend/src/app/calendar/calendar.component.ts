@@ -55,6 +55,7 @@ export class CalendarComponent implements OnInit {
   selectedDate: number = 0;
   amountOfDays: number = 1;
   maxAmountOfDays: number = 7;
+  selectedMonth: number = 0;
 
 
   constructor(private apiService: ApiService, private router: Router) {
@@ -87,8 +88,8 @@ export class CalendarComponent implements OnInit {
 
   setCalendarData() {
     let today = new Date();
-    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1 - 7);
-    let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 21 - today.getDay());
+    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
+    let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
 
 
     this.calendarData.days = [];
@@ -104,7 +105,7 @@ export class CalendarComponent implements OnInit {
         past: this.isPast(day),
         isOtherMonth: day.getMonth() !== today.getMonth(),
         dateDate: day.getDate(),
-        dateMonth: day.getMonth(),
+        dateMonth: day.getMonth() !== today.getMonth() ? today.getMonth() + 1 : today.getMonth()
       });
       day.setDate(day.getDate() + 1);
     }
@@ -133,23 +134,33 @@ export class CalendarComponent implements OnInit {
     return day < today;
   }
 
-  isDayInSelection(day: number) {
-    let start = this.selectedDate;
-    let end = this.selectedDate;
-    if (start > end) {
-      let temp = start;
-      start = end;
-      end = temp;
+  isDayInSelection(month: number, day: number) {
+    let start = new Date(this.calendarData.year, this.selectedMonth, this.selectedDate);
+    let end = new Date(start);
+    end.setDate(start.getDate() + this.amountOfDays - 1);
+    let date = new Date(this.calendarData.year, month, day);
+
+    console.log("------")
+    console.log("Start: " + start)
+    console.log("End: " + end)
+    if (start.getMonth() !== end.getMonth()) {
+      if (date.getMonth() === start.getMonth()) {
+        return date >= start && date <= new Date(this.calendarData.year, start.getMonth() + 1, 0);
+      } else if (date.getMonth() === end.getMonth()) {
+        return date >= new Date(this.calendarData.year, end.getMonth(), 1) && date <= end;
+      }
     }
-    // console.log(day.getDate(), start, end);
-    return day >= start && day <= end;
+
+    return date >= start && date <= end;
   }
 
-  selectDate(day: number) {
-    if (this.isBooked(new Date(this.calendarData.year, this.calendarData.month, day))) {
+  selectDate(month: number, day: number) {
+    if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
     }
-    console.log(day)
+
+    console.log("Selected date, month: " + day + ", " + month)
+    this.selectedMonth = month;
     this.selectedDate = day;
   }
 }

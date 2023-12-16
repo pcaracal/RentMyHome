@@ -30,12 +30,14 @@
         </thead>
         <tbody>
         <tr *ngFor="let week of weeks">
-          <td *ngFor="let day of week.days" [class]="isDayInSelection(day.dateDate) ? 'date-selected' : ''">
-            <div [classList]="isDayInSelection(day.dateDate) ? 'date-selected' :''">
+          <td *ngFor="let day of week.days"
+              [class]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' : ''"
+              (click)="selectDate(day.dateMonth, day.dateDate)">
+            <div [classList]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' :''">
             </div>
             <div [class]="day.booked || day.past ? 'date-booked' : 'date-available'">
               <div [class]=" day.isOtherMonth ? 'date-other-month' : ''">
-              <span (click)="selectDate(day.dateDate)">
+              <span>
                 {{ day.date }}
               </span>
               </div>
