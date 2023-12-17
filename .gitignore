@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/angular,visualstudiocode,node,rust,rust-analyzer,rider,intellij,intellij+all,intellij+iml,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=angular,visualstudiocode,node,rust,rust-analyzer,rider,intellij,intellij+all,intellij+iml,dotenv
 
+db.sqlite3
+
 ### Angular ###
 ## Angular ##
 # compiled output
