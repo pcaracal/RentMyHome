@@ -33,7 +33,7 @@ pub fn get_bookings(room_id: i32) -> (Status, Option<Json<Vec<Booking>>>) {
 }
 
 #[post("/api/register", data = "<user>")]
-pub fn register(user: Json<User>) -> (Status, Option<Json<String>>) {
+pub fn post_register(user: Json<User>) -> (Status, Option<Json<String>>) {
     let mut connection = backend::establish_connection();
     let new_user = User {
         id: None,
@@ -58,6 +58,24 @@ pub fn register(user: Json<User>) -> (Status, Option<Json<String>>) {
         .order(schema::user::id.desc())
         .first::<User>(&mut connection)
         .expect("Error loading users");
+
+    (Status::Ok, Option::from(Json(auth::encode_token(results.id))))
+}
+
+#[post("/api/login", data = "<user>")]
+pub fn post_login(user: Json<User>) -> (Status, Option<Json<String>>) {
+    let mut connection = backend::establish_connection();
+
+    let results = match schema::user::table
+        .filter(schema::user::username.eq(&user.username))
+        .first::<User>(&mut connection) {
+        Ok(results) => results,
+        Err(_) => return (Status::Unauthorized, None),
+    };
+
+    if !auth::verify_password(&user.password, &results.password) {
+        return (Status::Unauthorized, None);
+    }
 
     (Status::Ok, Option::from(Json(auth::encode_token(results.id))))
 }
