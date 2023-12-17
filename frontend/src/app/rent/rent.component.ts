@@ -47,8 +47,21 @@ export class RentComponent implements OnInit {
     }
 
     this.rent_id = parseInt(url[id + 1]);
-    this.rentData = this.apiService.getRoom(this.rent_id);
-    this.bookings = this.apiService.getBookings(this.rent_id);
+
+    this.apiService.getRooms().subscribe(
+      (data: any) => {
+        for (let room of data) {
+          if (room.id === this.rent_id) {
+            this.rentData = room;
+            break;
+          }
+        }
+      }
+    )
+
+
+    this.bookings = this.apiService.getBookingsSync(this.rent_id);
+
 
     this.showCalendar = url.pop() === 'calendar';
 

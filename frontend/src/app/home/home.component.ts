@@ -26,7 +26,15 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.rooms = this.apiService.getRooms();
+    this.apiService.getRooms().pipe().subscribe(
+      (data: any) => {
+        this.rooms = data;
+      },
+      error => {
+      },
+      () => {
+      }
+    )
   }
 
 

@@ -29,7 +29,6 @@ impl<'r> FromRequest<'r> for Token<'r> {
     }
 }
 
-
 use argon2::{
     password_hash::{
         rand_core::OsRng,
@@ -59,7 +58,6 @@ pub fn encode_token(user_id: Option<i32>) -> String {
     let jwt_secret = env::var("JWT_SECRET").expect("jwt_secret must be set");
     let key = EncodingKey::from_secret(jwt_secret.as_ref());
     let token = jsonwebtoken::encode(&header, &claims, &key).unwrap();
-
     token
 }
 
@@ -78,7 +76,10 @@ pub fn decode_token(token: &str) -> i32 {
     let jwt_secret = env::var("JWT_SECRET").expect("jwt_secret must be set");
     let key = DecodingKey::from_secret(jwt_secret.as_ref());
     let validation = Validation::new(Algorithm::HS256);
-    let token_data = jsonwebtoken::decode::<Claims>(&*token, &key, &validation).unwrap();
+    let token_data = match jsonwebtoken::decode::<Claims>(&*token, &key, &validation) {
+        Ok(data) => data,
+        Err(_) => return -1,
+    };
 
     if token_data.claims.sub.parse::<i32>().is_ok() {
         token_data.claims.sub.parse::<i32>().unwrap()
