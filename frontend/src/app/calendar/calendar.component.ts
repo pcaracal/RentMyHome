@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ApiService} from "../api.service";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
@@ -106,13 +106,11 @@ export class CalendarComponent implements OnInit {
   tempAmountOfDays: number = 1;
 
 
-  constructor(private apiService: ApiService, private router: Router) {
+  constructor(private apiService: ApiService, private router: Router, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    // stripe
     this.invokeStripe();
-
 
     let url = window.location.href.split('/');
     let id = url.indexOf('rent');
@@ -122,34 +120,39 @@ export class CalendarComponent implements OnInit {
     }
 
     this.rentId = parseInt(url[id + 1]);
-    this.bookings = this.apiService.getBookings(this.rentId);
-    this.bookings.push({
-      id: 0,
-      fk_room_id: 0,
-      fk_user_id: 0,
-      start_date: '2000-01-01',
-      end_date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+
+    this.apiService.getBookings(this.rentId).subscribe((data: any) => {
+      this.bookings = data;
+      this.bookings.push({
+        id: 0,
+        fk_room_id: 0,
+        fk_user_id: 0,
+        start_date: '2000-01-01',
+        end_date: new Date(new Date().getTime()).toISOString().split('T')[0],
+      });
+
+      this.setCalendarData();
+
+      this.calendarData.days.forEach((day, index) => {
+        if (index % 7 === 0) {
+          this.weeks.push({
+            days: []
+          });
+        }
+        this.weeks[this.weeks.length - 1].days.push(day);
+      });
+
+
+      this.cdr.detectChanges();
+      this.selectedDate = this.calendarData.days[0].dateDate;
     });
-
-    this.setCalendarData();
-
-    this.calendarData.days.forEach((day, index) => {
-      if (index % 7 === 0) {
-        this.weeks.push({
-          days: []
-        });
-      }
-      this.weeks[this.weeks.length - 1].days.push(day);
-    });
-
-    this.selectedDate = this.calendarData.days[0].dateDate;
   }
+
 
   setCalendarData() {
     let today = new Date();
     let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() - 6);
     let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
-
 
     this.calendarData.days = [];
     this.calendarData.month = start.toLocaleString('default', {month: 'long'});
@@ -266,5 +269,39 @@ export class CalendarComponent implements OnInit {
     this.amountOfDays = parseInt((amount.target as HTMLInputElement).value);
     this.tempAmountOfDays = this.amountOfDays;
     console.log(this.amountOfDays);
+  }
+
+  handleBook() {
+    let date = new Date(this.selectedYear, this.selectedMonth, this.selectedDate);
+    let currentYear = new Date().getFullYear();
+    if (date.getFullYear() - currentYear === 2) {
+      date.setFullYear(currentYear + 1);
+    }
+
+    let start = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+
+    let end = new Date(date.getTime());
+    end.setDate(end.getDate() + this.amountOfDays - 1);
+    let endStr = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+
+    console.log(start);
+    console.log(endStr);
+    console.log("------------------");
+
+    this.postBooking(start, endStr, this.rentId);
+
+    // this.makePayment(this.amountOfDays * 100);
+  }
+
+  postBooking(start: string, end: string, room: number) {
+    this.apiService.postBooking({
+      start_date: start,
+      end_date: end,
+      room_id: 0,
+      user_id: 0
+    }, room).subscribe((data: any) => {
+      window.location.reload();
+      console.log(data);
+    });
   }
 }
