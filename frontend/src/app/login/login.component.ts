@@ -45,6 +45,7 @@ export class LoginComponent {
         this.apiService.bearerToken = data;
         this.toastr.success('Login successful', 'Success');
         window.history.back();
+        // window.location.reload();
       },
       (error: any) => {
         this.apiService.bearerToken = '';
@@ -70,6 +71,7 @@ export class LoginComponent {
         this.toastr.success('Registration successful', 'Success');
         this.apiService.bearerToken = data;
         window.history.back();
+        // window.location.reload();
       },
       (error: any) => {
         switch (error.status) {

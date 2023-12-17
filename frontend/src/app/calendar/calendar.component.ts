@@ -18,6 +18,10 @@ import {FormsModule} from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent implements OnInit {
+  // check login thing
+  isLoggedIn: boolean = false;
+
+
   // stripe thing
   paymentHandler: any = null;
   stripeAPIKey: string = 'pk_test_51OO43KAjte1PgIiQDiM43Emt9SSsH8UH0IRyDgWgpS6Wq4Hvd97hEMSyhi7OvHSSjfpkLGVgxcmhG0IHWVcDhVm300b2Dl9SNY';
@@ -110,6 +114,13 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.apiService.getVerify().subscribe((data: any) => {
+      this.isLoggedIn = true;
+    }, (error: any) => {
+      this.isLoggedIn = false;
+    });
+
+
     this.invokeStripe();
 
     let url = window.location.href.split('/');
@@ -215,6 +226,13 @@ export class CalendarComponent implements OnInit {
   }
 
   selectDate(year: number, month: number, day: number) {
+    this.apiService.getVerify().subscribe((data: any) => {
+      this.isLoggedIn = true;
+    }, (error: any) => {
+      this.isLoggedIn = false;
+    });
+
+
     if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
     }
@@ -268,7 +286,7 @@ export class CalendarComponent implements OnInit {
   changeAmountOfDays(amount: Event) {
     this.amountOfDays = parseInt((amount.target as HTMLInputElement).value);
     this.tempAmountOfDays = this.amountOfDays;
-    console.log(this.amountOfDays);
+    // console.log(this.amountOfDays);
   }
 
   handleBook() {
@@ -284,9 +302,9 @@ export class CalendarComponent implements OnInit {
     end.setDate(end.getDate() + this.amountOfDays - 1);
     let endStr = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
 
-    console.log(start);
-    console.log(endStr);
-    console.log("------------------");
+    // console.log(start);
+    // console.log(endStr);
+    // console.log("------------------");
 
     this.postBooking(start, endStr, this.rentId);
 
@@ -301,7 +319,10 @@ export class CalendarComponent implements OnInit {
       user_id: 0
     }, room).subscribe((data: any) => {
       window.location.reload();
-      console.log(data);
     });
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }

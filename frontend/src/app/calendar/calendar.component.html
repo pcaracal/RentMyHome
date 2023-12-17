@@ -52,7 +52,7 @@
       </body>
     </article>
 
-    <article *ngIf="hasSelectedDate">
+    <article *ngIf="hasSelectedDate && isLoggedIn">
       <header>
         <h1>Payment</h1>
       </header>
@@ -84,6 +84,16 @@
       <footer>
         <button (click)="handleBook()">Book</button>
       </footer>
+    </article>
+
+
+    <article *ngIf="!isLoggedIn && hasSelectedDate">
+      <header>
+        <h1>You have to log in to rent a room</h1>
+      </header>
+      <body>
+      <button class="outline" (click)="goToLogin()">Go to login</button>
+      </body>
     </article>
   </div>
 </div>
