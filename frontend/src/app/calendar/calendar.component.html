@@ -39,8 +39,6 @@
           <td *ngFor="let day of week.days"
               [class]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' : ''"
               (click)="selectDate(day.dateYear, day.dateMonth, day.dateDate)">
-            <div [classList]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' :''">
-            </div>
             <div [class]="day.booked || day.past ? 'date-booked' : 'date-available'">
               <div [class]=" day.isOtherMonth ? 'date-other-month' : ''">
               <span>
