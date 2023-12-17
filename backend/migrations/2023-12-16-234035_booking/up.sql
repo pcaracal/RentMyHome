@@ -6,7 +6,6 @@ create table 'booking'
     'end_date'   text    not null,
     'room_id'    integer not null,
     'user_id'    integer not null,
-    'created_at' text    not null default current_timestamp,
     foreign key ('room_id') references 'room' ('id') on delete cascade on update cascade,
     foreign key ('user_id') references 'user' ('id') on delete cascade on update cascade
 );

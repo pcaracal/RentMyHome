@@ -7,7 +7,6 @@ diesel::table! {
         end_date -> Text,
         room_id -> Integer,
         user_id -> Integer,
-        created_at -> Text,
     }
 }
 
@@ -23,11 +22,9 @@ diesel::table! {
 
 diesel::table! {
     user (id) {
-        id -> Integer,
-        name -> Text,
-        email -> Text,
+        id -> Nullable<Integer>,
+        username -> Text,
         password -> Text,
-        created_at -> Timestamp,
     }
 }
 

@@ -1,9 +1,9 @@
 use rocket::serde::json::Json;
 use rocket_http::Status;
-use backend::models::{Booking, Room};
+use backend::models::{Booking, Room, User};
 use serde_json::json;
 use diesel::prelude::*;
-use backend::schema;
+use backend::{auth, schema};
 
 #[get("/api/rooms")]
 pub fn get_rooms() -> (Status, Option<Json<Vec<Room>>>) {
@@ -30,4 +30,34 @@ pub fn get_bookings(room_id: i32) -> (Status, Option<Json<Vec<Booking>>>) {
     };
 
     bookings
+}
+
+#[post("/api/register", data = "<user>")]
+pub fn register(user: Json<User>) -> (Status, Option<Json<String>>) {
+    let mut connection = backend::establish_connection();
+    let new_user = User {
+        id: None,
+        username: user.username.clone(),
+        password: auth::hash_password(&user.password),
+    };
+
+    match schema::user::table
+        .filter(schema::user::username.eq(&user.username))
+        .first::<User>(&mut connection) {
+        Ok(_) => return (Status::Conflict, Option::from(Json(String::from("User already exists")))),
+        Err(_) => (),
+    };
+
+
+    diesel::insert_into(schema::user::table)
+        .values(&new_user)
+        .execute(&mut connection)
+        .expect("Error saving new user");
+
+    let results = schema::user::table
+        .order(schema::user::id.desc())
+        .first::<User>(&mut connection)
+        .expect("Error loading users");
+
+    (Status::Ok, Option::from(Json(auth::encode_token(results.id))))
 }

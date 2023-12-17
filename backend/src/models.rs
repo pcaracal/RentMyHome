@@ -5,11 +5,9 @@ use rocket::serde::{Deserialize, Serialize};
 #[diesel(table_name = crate::schema::user)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct User {
-    pub id: i32,
-    pub name: String,
-    pub email: String,
+    pub id: Option<i32>,
+    pub username: String,
     pub password: String,
-    pub created_at: chrono::NaiveDateTime,
 }
 
 #[derive(Queryable, Selectable, Insertable, Serialize, Deserialize)]
@@ -32,15 +30,13 @@ pub struct Booking {
     pub end_date: String,
     pub room_id: i32,
     pub user_id: i32,
-    pub created_at: String,
 }
 
 #[derive(AsChangeset, Serialize, Deserialize)]
 #[diesel(table_name = crate::schema::user)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct UserChangeset {
-    pub name: Option<String>,
-    pub email: Option<String>,
+    pub username: Option<String>,
     pub password: Option<String>,
 }
 
@@ -62,5 +58,4 @@ pub struct BookingChangeset {
     pub end_date: Option<String>,
     pub room_id: Option<i32>,
     pub user_id: Option<i32>,
-    pub created_at: Option<String>,
 }
