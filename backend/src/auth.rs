@@ -6,7 +6,7 @@ use std::env;
 use rocket::request::{Outcome, Request, FromRequest};
 use rocket_http::Status;
 
-pub struct Token<'r>(&'r str);
+pub struct Token<'r>(pub &'r str);
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for Token<'r> {
@@ -68,10 +68,17 @@ pub fn decode_token(token: &str) -> i32 {
     if token == "" {
         return -1;
     }
+
+    let token = if token.starts_with("Bearer") {
+        token[7..].to_string()
+    } else {
+        token.to_string()
+    };
+
     let jwt_secret = env::var("JWT_SECRET").expect("jwt_secret must be set");
     let key = DecodingKey::from_secret(jwt_secret.as_ref());
     let validation = Validation::new(Algorithm::HS256);
-    let token_data = jsonwebtoken::decode::<Claims>(token, &key, &validation).unwrap();
+    let token_data = jsonwebtoken::decode::<Claims>(&*token, &key, &validation).unwrap();
 
     if token_data.claims.sub.parse::<i32>().is_ok() {
         token_data.claims.sub.parse::<i32>().unwrap()
