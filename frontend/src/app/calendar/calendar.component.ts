@@ -345,6 +345,7 @@ export class CalendarComponent implements OnInit {
       room_id: 0,
       user_id: 0
     }, room).subscribe((data: any) => {
+      // TODO: Post booking extras here
       window.location.reload();
     });
   }
