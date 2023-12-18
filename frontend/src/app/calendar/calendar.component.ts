@@ -46,13 +46,14 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  makePayment(amount: any) {
+  makePayment(amount: any, start: string, end: string, room: number) {
     const paymentHandler = (<any>window).StripeCheckout.configure({
       key: this.stripeAPIKey,
       locale: 'auto',
-      token: function (stripeToken: any) {
+      token: (stripeToken: any) => {
         console.log(stripeToken);
         // TODO: Send token to backend for processing
+        this.postBooking(start, end, room);
       },
     });
     paymentHandler.open({
@@ -201,8 +202,8 @@ export class CalendarComponent implements OnInit {
   isToday(day: Date) {
     let today = new Date();
     return day.getDate() === today.getDate() &&
-      day.getMonth() === today.getMonth() &&
-      day.getFullYear() === today.getFullYear();
+        day.getMonth() === today.getMonth() &&
+        day.getFullYear() === today.getFullYear();
   }
 
   isPast(day: Date) {
@@ -306,9 +307,9 @@ export class CalendarComponent implements OnInit {
     // console.log(endStr);
     // console.log("------------------");
 
-    this.postBooking(start, endStr, this.rentId);
+    this.makePayment(this.amountOfDays * 100, start, endStr, this.rentId);
 
-    // this.makePayment(this.amountOfDays * 100);
+    // this.postBooking(start, endStr, this.rentId);
   }
 
   postBooking(start: string, end: string, room: number) {
