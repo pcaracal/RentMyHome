@@ -131,10 +131,10 @@
             }}
           </strong></td>
           <td><strong>{{ amountOfDays }}</strong></td>
-          <td><strong class="price-text">{{ amountOfDays * 100 }} CHF</strong></td>
+          <td><strong class="price-text">{{ amountOfDays * 50 }} CHF</strong></td>
       </table>
 
-      <table>
+      <table *ngIf="hasSelectedAnyExtras()">
         <thead>
         <tr>
           <th>Extras</th>

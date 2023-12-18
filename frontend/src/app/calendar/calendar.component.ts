@@ -387,4 +387,16 @@ export class CalendarComponent implements OnInit {
       this.totalPrice += this.amountOfDays * 50;
     }
   }
+
+  hasSelectedAnyExtras() {
+    return this.hasBedSheets
+        || this.hasTowels
+        || this.hasCleaning
+        || this.hasBreakfast
+        || this.hasLunch
+        || this.hasDinner
+        || this.hasParking
+        || this.hasWifi
+        || this.hasSafe;
+  }
 }
