@@ -115,3 +115,19 @@ pub fn post_booking(room_id: i32, token: Token, booking: Json<Booking>) -> (Stat
 
     (Status::Ok, Option::from(Json(String::from("Booking created"))))
 }
+
+#[get("/api/verify")]
+pub fn get_verify(token: Token) -> (Status, Option<Json<String>>) {
+    let mut connection = backend::establish_connection();
+
+    let user_id = auth::decode_token(token.0);
+
+    let results = match schema::user::table
+        .filter(schema::user::id.eq(user_id))
+        .first::<User>(&mut connection) {
+        Ok(results) => results,
+        Err(_) => return (Status::Unauthorized, None),
+    };
+
+    (Status::Ok, Option::from(Json(results.username)))
+}

@@ -30,11 +30,12 @@
 
   table {
     text-align: center;
+
+    span {
+      font-family: "JetBrainsMono NF ExtraBold", monospace;
+    }
   }
 
-  span {
-    font-family: "JetBrainsMono NF ExtraBold", monospace;
-  }
 
   .date-booked {
     span {
@@ -43,12 +44,13 @@
   }
 
   .date-available {
-    span {
-      color: #a8f38b !important;
+    &:hover {
+      cursor: pointer;
+    }
 
-      &:hover {
-        cursor: pointer;
-      }
+    span {
+      width: 100%;
+      color: #a8f38b !important;
     }
   }
 
@@ -61,8 +63,12 @@
       font-family: "JetBrainsMono NF ExtraLight", monospace !important;
     }
   }
+}
 
-  td.date-today {
-    border: 2px solid #cba6f7 !important;
-  }
+.extras-price {
+  color: #eba0ac !important;
+}
+
+.price-text {
+  color: #eba0ac !important;
 }

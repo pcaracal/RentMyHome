@@ -13,7 +13,7 @@ export class ApiService {
   private _bearerToken: string = '';
 
   get bearerToken(): string {
-    console.log('get bearerToken', sessionStorage.getItem('bearerToken') || '');
+    // console.log('get bearerToken', sessionStorage.getItem('bearerToken') || '');
     return sessionStorage.getItem('bearerToken') || '';
   }
 
@@ -75,5 +75,15 @@ export class ApiService {
     }
 
     return this.http.post(this._apiUrl + '/register', body);
+  }
+
+  getVerify() {
+    const httpOptions = {
+      headers: {
+        'Authorization': 'Bearer ' + this.bearerToken,
+        'Content-Type': 'application/json'
+      }
+    };
+    return this.http.get(this._apiUrl + '/verify', httpOptions);
   }
 }
