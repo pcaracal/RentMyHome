@@ -63,7 +63,7 @@ pub fn encode_token(user_id: Option<i32>) -> String {
 
 pub fn decode_token(token: &str) -> i32 {
     dotenv().ok();
-    if token == "" {
+    if token == "" || token.len() < 7 {
         return -1;
     }
 

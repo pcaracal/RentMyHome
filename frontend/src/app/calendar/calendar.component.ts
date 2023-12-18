@@ -18,6 +18,10 @@ import {FormsModule} from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent implements OnInit {
+  // check login thing
+  isLoggedIn: boolean = false;
+
+
   // stripe thing
   paymentHandler: any = null;
   stripeAPIKey: string = 'pk_test_51OO43KAjte1PgIiQDiM43Emt9SSsH8UH0IRyDgWgpS6Wq4Hvd97hEMSyhi7OvHSSjfpkLGVgxcmhG0IHWVcDhVm300b2Dl9SNY';
@@ -42,13 +46,14 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  makePayment(amount: any) {
+  makePayment(amount: any, start: string, end: string, room: number) {
     const paymentHandler = (<any>window).StripeCheckout.configure({
       key: this.stripeAPIKey,
       locale: 'auto',
-      token: function (stripeToken: any) {
+      token: (stripeToken: any) => {
         console.log(stripeToken);
         // TODO: Send token to backend for processing
+        this.postBooking(start, end, room);
       },
     });
     paymentHandler.open({
@@ -58,7 +63,30 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  totalPrice: number = 0;
 
+  // extras
+  hasBedSheets: boolean = false;
+  hasTowels: boolean = false;
+  hasCleaning: boolean = false;
+  hasBreakfast: boolean = false;
+  hasLunch: boolean = false;
+  hasDinner: boolean = false;
+  hasParking: boolean = false;
+  hasWifi: boolean = false;
+  hasSafe: boolean = false;
+
+  bedSheetsPrice: number = 10;
+  towelsPrice: number = 5;
+  cleaningPrice: number = 15;
+  breakfastPrice: number = 5;
+  lunchPrice: number = 10;
+  dinnerPrice: number = 15;
+  parkingPrice: number = 5;
+  wifiPrice: number = 5;
+  safePrice: number = 5;
+
+  // rent things
   rentId: number = -1;
   bookings: {
     id: number,
@@ -110,6 +138,13 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.apiService.getVerify().subscribe((data: any) => {
+      this.isLoggedIn = true;
+    }, (error: any) => {
+      this.isLoggedIn = false;
+    });
+
+
     this.invokeStripe();
 
     let url = window.location.href.split('/');
@@ -190,8 +225,8 @@ export class CalendarComponent implements OnInit {
   isToday(day: Date) {
     let today = new Date();
     return day.getDate() === today.getDate() &&
-      day.getMonth() === today.getMonth() &&
-      day.getFullYear() === today.getFullYear();
+        day.getMonth() === today.getMonth() &&
+        day.getFullYear() === today.getFullYear();
   }
 
   isPast(day: Date) {
@@ -215,6 +250,13 @@ export class CalendarComponent implements OnInit {
   }
 
   selectDate(year: number, month: number, day: number) {
+    this.apiService.getVerify().subscribe((data: any) => {
+      this.isLoggedIn = true;
+    }, (error: any) => {
+      this.isLoggedIn = false;
+    });
+
+
     if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
     }
@@ -246,6 +288,8 @@ export class CalendarComponent implements OnInit {
       this.maxAmountOfDays = 7;
     }
     this.tempAmountOfDays = this.amountOfDays;
+
+    this.refreshTotalPrice();
   }
 
   getNextBooking(fromDate: Date) {
@@ -268,7 +312,8 @@ export class CalendarComponent implements OnInit {
   changeAmountOfDays(amount: Event) {
     this.amountOfDays = parseInt((amount.target as HTMLInputElement).value);
     this.tempAmountOfDays = this.amountOfDays;
-    console.log(this.amountOfDays);
+    // console.log(this.amountOfDays);
+    this.refreshTotalPrice();
   }
 
   handleBook() {
@@ -284,13 +329,13 @@ export class CalendarComponent implements OnInit {
     end.setDate(end.getDate() + this.amountOfDays - 1);
     let endStr = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
 
-    console.log(start);
-    console.log(endStr);
-    console.log("------------------");
+    // console.log(start);
+    // console.log(endStr);
+    // console.log("------------------");
 
-    this.postBooking(start, endStr, this.rentId);
+    this.makePayment(this.totalPrice, start, endStr, this.rentId);
 
-    // this.makePayment(this.amountOfDays * 100);
+    // this.postBooking(start, endStr, this.rentId);
   }
 
   postBooking(start: string, end: string, room: number) {
@@ -301,7 +346,57 @@ export class CalendarComponent implements OnInit {
       user_id: 0
     }, room).subscribe((data: any) => {
       window.location.reload();
-      console.log(data);
     });
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  refreshTotalPrice() {
+    this.totalPrice = 0;
+    if (this.hasBedSheets) {
+      this.totalPrice += this.bedSheetsPrice * this.amountOfDays;
+    }
+    if (this.hasTowels) {
+      this.totalPrice += this.towelsPrice * this.amountOfDays;
+    }
+    if (this.hasCleaning) {
+      this.totalPrice += this.cleaningPrice * this.amountOfDays;
+    }
+    if (this.hasBreakfast) {
+      this.totalPrice += this.breakfastPrice * this.amountOfDays;
+    }
+    if (this.hasLunch) {
+      this.totalPrice += this.lunchPrice * this.amountOfDays;
+    }
+    if (this.hasDinner) {
+      this.totalPrice += this.dinnerPrice * this.amountOfDays;
+    }
+    if (this.hasParking) {
+      this.totalPrice += this.parkingPrice * this.amountOfDays;
+    }
+    if (this.hasWifi) {
+      this.totalPrice += this.wifiPrice * this.amountOfDays;
+    }
+    if (this.hasSafe) {
+      this.totalPrice += this.safePrice * this.amountOfDays;
+    }
+
+    if (this.hasSelectedDate) {
+      this.totalPrice += this.amountOfDays * 50;
+    }
+  }
+
+  hasSelectedAnyExtras() {
+    return this.hasBedSheets
+        || this.hasTowels
+        || this.hasCleaning
+        || this.hasBreakfast
+        || this.hasLunch
+        || this.hasDinner
+        || this.hasParking
+        || this.hasWifi
+        || this.hasSafe;
   }
 }

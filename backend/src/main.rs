@@ -11,5 +11,13 @@ fn rocket() -> _ {
         .allow_credentials(true)
         .to_cors().unwrap();
 
-    rocket::build().attach(cors).mount("/", routes![routes::get_rooms, routes::get_bookings, routes::post_register, routes::post_login, routes::post_booking])
+    rocket::build().attach(cors).mount("/",
+                                       routes![
+                                           routes::get_rooms,
+                                           routes::get_bookings,
+                                           routes::post_register, 
+                                           routes::post_login, 
+                                           routes::post_booking,
+                                           routes::get_verify
+                                       ])
 }
