@@ -30,11 +30,12 @@
 
   table {
     text-align: center;
+
+    span {
+      font-family: "JetBrainsMono NF ExtraBold", monospace;
+    }
   }
 
-  span {
-    font-family: "JetBrainsMono NF ExtraBold", monospace;
-  }
 
   .date-booked {
     span {
@@ -62,4 +63,12 @@
       font-family: "JetBrainsMono NF ExtraLight", monospace !important;
     }
   }
+}
+
+.extras-price {
+  color: #eba0ac !important;
+}
+
+.price-text {
+  color: #eba0ac !important;
 }

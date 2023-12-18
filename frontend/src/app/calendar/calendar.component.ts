@@ -63,7 +63,30 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  totalPrice: number = 0;
 
+  // extras
+  hasBedSheets: boolean = false;
+  hasTowels: boolean = false;
+  hasCleaning: boolean = false;
+  hasBreakfast: boolean = false;
+  hasLunch: boolean = false;
+  hasDinner: boolean = false;
+  hasParking: boolean = false;
+  hasWifi: boolean = false;
+  hasSafe: boolean = false;
+
+  bedSheetsPrice: number = 10;
+  towelsPrice: number = 5;
+  cleaningPrice: number = 15;
+  breakfastPrice: number = 5;
+  lunchPrice: number = 10;
+  dinnerPrice: number = 15;
+  parkingPrice: number = 5;
+  wifiPrice: number = 5;
+  safePrice: number = 5;
+
+  // rent things
   rentId: number = -1;
   bookings: {
     id: number,
@@ -265,6 +288,8 @@ export class CalendarComponent implements OnInit {
       this.maxAmountOfDays = 7;
     }
     this.tempAmountOfDays = this.amountOfDays;
+
+    this.refreshTotalPrice();
   }
 
   getNextBooking(fromDate: Date) {
@@ -288,6 +313,7 @@ export class CalendarComponent implements OnInit {
     this.amountOfDays = parseInt((amount.target as HTMLInputElement).value);
     this.tempAmountOfDays = this.amountOfDays;
     // console.log(this.amountOfDays);
+    this.refreshTotalPrice();
   }
 
   handleBook() {
@@ -307,7 +333,7 @@ export class CalendarComponent implements OnInit {
     // console.log(endStr);
     // console.log("------------------");
 
-    this.makePayment(this.amountOfDays * 100, start, endStr, this.rentId);
+    this.makePayment(this.totalPrice, start, endStr, this.rentId);
 
     // this.postBooking(start, endStr, this.rentId);
   }
@@ -325,5 +351,40 @@ export class CalendarComponent implements OnInit {
 
   goToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  refreshTotalPrice() {
+    this.totalPrice = 0;
+    if (this.hasBedSheets) {
+      this.totalPrice += this.bedSheetsPrice * this.amountOfDays;
+    }
+    if (this.hasTowels) {
+      this.totalPrice += this.towelsPrice * this.amountOfDays;
+    }
+    if (this.hasCleaning) {
+      this.totalPrice += this.cleaningPrice * this.amountOfDays;
+    }
+    if (this.hasBreakfast) {
+      this.totalPrice += this.breakfastPrice * this.amountOfDays;
+    }
+    if (this.hasLunch) {
+      this.totalPrice += this.lunchPrice * this.amountOfDays;
+    }
+    if (this.hasDinner) {
+      this.totalPrice += this.dinnerPrice * this.amountOfDays;
+    }
+    if (this.hasParking) {
+      this.totalPrice += this.parkingPrice * this.amountOfDays;
+    }
+    if (this.hasWifi) {
+      this.totalPrice += this.wifiPrice * this.amountOfDays;
+    }
+    if (this.hasSafe) {
+      this.totalPrice += this.safePrice * this.amountOfDays;
+    }
+
+    if (this.hasSelectedDate) {
+      this.totalPrice += this.amountOfDays * 50;
+    }
   }
 }
