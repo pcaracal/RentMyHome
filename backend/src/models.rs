@@ -32,6 +32,26 @@ pub struct Booking {
     pub user_id: i32,
 }
 
+#[derive(Queryable, Selectable, Insertable, Serialize, Deserialize)]
+#[diesel(table_name = crate::schema::booking_extras)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct BookingExtras {
+    pub id: Option<i32>,
+    pub booking_id: i32,
+    pub user_id: i32,
+    pub stripe_token_id: String,
+    pub payment_amount: i32,
+    pub has_bedsheets: Option<bool>,
+    pub has_towels: Option<bool>,
+    pub has_cleaning: Option<bool>,
+    pub has_breakfast: Option<bool>,
+    pub has_lunch: Option<bool>,
+    pub has_dinner: Option<bool>,
+    pub has_parking: Option<bool>,
+    pub has_wifi: Option<bool>,
+    pub has_safe: Option<bool>,
+}
+
 #[derive(AsChangeset, Serialize, Deserialize)]
 #[diesel(table_name = crate::schema::user)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]

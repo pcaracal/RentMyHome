@@ -18,6 +18,8 @@ fn rocket() -> _ {
                                            routes::post_register, 
                                            routes::post_login, 
                                            routes::post_booking,
-                                           routes::get_verify
+                                           routes::get_verify,
+                                           routes::post_booking_extras,
+                                           routes::get_booking_extras,
                                        ])
 }
