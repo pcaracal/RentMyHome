@@ -53,7 +53,7 @@ export class CalendarComponent implements OnInit {
       token: (stripeToken: any) => {
         console.log(stripeToken);
         // TODO: Send token to backend for processing
-        this.postBooking(start, end, room);
+        this.postBooking(start, end, room, stripeToken.id);
       },
     });
     paymentHandler.open({
@@ -338,15 +338,17 @@ export class CalendarComponent implements OnInit {
     // this.postBooking(start, endStr, this.rentId);
   }
 
-  postBooking(start: string, end: string, room: number) {
+  postBooking(start: string, end: string, room: number, stripeToken: string) {
     this.apiService.postBooking({
       start_date: start,
       end_date: end,
       room_id: 0,
       user_id: 0
     }, room).subscribe((data: any) => {
-      // TODO: Post booking extras here
-      window.location.reload();
+      // TODO: Post booking extras here to data.id, stripeToken and other things
+      this.apiService.postBookingExtras(data.id, stripeToken, this.totalPrice, this.hasBedSheets, this.hasTowels, this.hasCleaning, this.hasBreakfast, this.hasLunch, this.hasDinner, this.hasParking, this.hasWifi, this.hasSafe).subscribe((data: any) => {
+        window.location.reload();
+      });
     });
   }
 

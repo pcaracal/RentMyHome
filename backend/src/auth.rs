@@ -51,7 +51,7 @@ pub fn encode_token(user_id: Option<i32>) -> String {
 
     let claims = Claims {
         sub: user_id.unwrap().to_string(),
-        exp: (Utc::now() + chrono::Duration::hours(1)).timestamp() as usize,
+        exp: (Utc::now() + chrono::Duration::hours(8)).timestamp() as usize,
     };
 
     let header = Header::new(Algorithm::HS256);
