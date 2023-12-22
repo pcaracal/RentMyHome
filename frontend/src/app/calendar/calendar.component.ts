@@ -213,7 +213,6 @@ export class CalendarComponent implements OnInit {
   isBooked(day: Date) {
     for (let booking of this.bookings) {
       let start = new Date(booking.start_date);
-      start.setDate(start.getDate() - 1);
       let end = new Date(booking.end_date);
       if (day >= start && day <= end) {
         return true;
@@ -297,6 +296,7 @@ export class CalendarComponent implements OnInit {
     for (let booking of this.bookings) {
       let start = new Date(booking.start_date);
       start.setDate(start.getDate() - 1);
+      start.setHours(1, 0, 0, 0);
       if (start > fromDate && (nextBooking == null || start < nextBooking)) {
         nextBooking = start;
       }
