@@ -1,6 +1,6 @@
 use rocket::serde::json::Json;
 use rocket_http::Status;
-use backend::models::{Booking, Room, User};
+use backend::models::{Booking, BookingExtras, Room, User};
 use diesel::prelude::*;
 use backend::{auth, schema};
 use backend::auth::Token;
@@ -81,7 +81,7 @@ pub fn post_login(user: Json<User>) -> (Status, Option<Json<String>>) {
 }
 
 #[post("/api/bookings/<room_id>", data = "<booking>")]
-pub fn post_booking(room_id: i32, token: Token, booking: Json<Booking>) -> (Status, Option<Json<String>>) {
+pub fn post_booking(room_id: i32, token: Token, booking: Json<Booking>) -> (Status, Option<Json<Booking>>) {
     let mut connection = backend::establish_connection();
 
     let user_id = auth::decode_token(token.0);
@@ -99,7 +99,7 @@ pub fn post_booking(room_id: i32, token: Token, booking: Json<Booking>) -> (Stat
         .filter(schema::booking::start_date.eq(&booking.start_date))
         .filter(schema::booking::end_date.eq(&booking.end_date))
         .first::<Booking>(&mut connection) {
-        Ok(_) => return (Status::Conflict, Option::from(Json(String::from("Booking already exists")))),
+        Ok(_) => return (Status::Conflict, None),
         Err(_) => (),
     };
 
@@ -113,7 +113,7 @@ pub fn post_booking(room_id: i32, token: Token, booking: Json<Booking>) -> (Stat
         .first::<Booking>(&mut connection)
         .expect("Error loading bookings");
 
-    (Status::Ok, Option::from(Json(String::from("Booking created"))))
+    (Status::Ok, Option::from(Json(results)))
 }
 
 #[get("/api/verify")]
@@ -130,4 +130,65 @@ pub fn get_verify(token: Token) -> (Status, Option<Json<String>>) {
     };
 
     (Status::Ok, Option::from(Json(results.username)))
+}
+
+#[post("/api/booking_extras", data = "<booking_extras>")]
+pub fn post_booking_extras(token: Token, booking_extras: Json<BookingExtras>) -> (Status, Option<Json<String>>) {
+    let mut connection = backend::establish_connection();
+
+    let user_id = auth::decode_token(token.0);
+
+    let new_booking_extras = BookingExtras {
+        id: None,
+        booking_id: booking_extras.booking_id.clone(),
+        user_id,
+        stripe_token_id: booking_extras.stripe_token_id.clone(),
+        payment_amount: booking_extras.payment_amount.clone(),
+        has_bedsheets: booking_extras.has_bedsheets.clone(),
+        has_towels: booking_extras.has_towels.clone(),
+        has_cleaning: booking_extras.has_cleaning.clone(),
+        has_breakfast: booking_extras.has_breakfast.clone(),
+        has_lunch: booking_extras.has_lunch.clone(),
+        has_dinner: booking_extras.has_dinner.clone(),
+        has_parking: booking_extras.has_parking.clone(),
+        has_wifi: booking_extras.has_wifi.clone(),
+        has_safe: booking_extras.has_safe.clone(),
+    };
+
+    match schema::booking_extras::table
+        .filter(schema::booking_extras::booking_id.eq(booking_extras.booking_id.clone()))
+        .filter(schema::booking_extras::user_id.eq(user_id))
+        .first::<BookingExtras>(&mut connection) {
+        Ok(_) => return (Status::Conflict, Option::from(Json(String::from("Booking extras already exists")))),
+        Err(_) => (),
+    };
+
+    diesel::insert_into(schema::booking_extras::table)
+        .values(&new_booking_extras)
+        .execute(&mut connection)
+        .expect("Error saving new booking extras");
+
+    let results = schema::booking_extras::table
+        .order(schema::booking_extras::id.desc())
+        .first::<BookingExtras>(&mut connection)
+        .expect("Error loading booking extras");
+
+    (Status::Ok, Option::from(Json(String::from("Booking extras created"))))
+}
+
+#[get("/api/booking_extras/<booking_id>")]
+pub fn get_booking_extras(booking_id: i32, token: Token) -> (Status, Option<Json<Vec<BookingExtras>>>) {
+    let mut connection = backend::establish_connection();
+
+    let user_id = auth::decode_token(token.0);
+
+    let booking_extras = match schema::booking_extras::table
+        .filter(schema::booking_extras::booking_id.eq(booking_id))
+        .filter(schema::booking_extras::user_id.eq(user_id))
+        .load::<BookingExtras>(&mut connection) {
+        Ok(booking_extras) => (Status::Ok, Some(Json(booking_extras))),
+        Err(_) => return (Status::InternalServerError, None),
+    };
+
+    booking_extras
 }
