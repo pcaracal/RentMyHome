@@ -186,7 +186,7 @@ export class CalendarComponent implements OnInit {
 
   setCalendarData() {
     let today = new Date();
-    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() - 6);
+    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() +1);
     let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
 
     this.calendarData.days = [];
