@@ -190,8 +190,8 @@ export class CalendarComponent implements OnInit {
     let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
 
     this.calendarData.days = [];
-    this.calendarData.month = start.toLocaleString('default', {month: 'long'});
-    this.calendarData.year = start.getFullYear();
+    this.calendarData.month = today.toLocaleString('default', {month: 'long'});
+    this.calendarData.year = today.getFullYear();
 
     let day = start;
     while (day <= end) {
@@ -224,8 +224,8 @@ export class CalendarComponent implements OnInit {
   isToday(day: Date) {
     let today = new Date();
     return day.getDate() === today.getDate() &&
-        day.getMonth() === today.getMonth() &&
-        day.getFullYear() === today.getFullYear();
+      day.getMonth() === today.getMonth() &&
+      day.getFullYear() === today.getFullYear();
   }
 
   isPast(day: Date) {
@@ -254,7 +254,6 @@ export class CalendarComponent implements OnInit {
     }, (error: any) => {
       this.isLoggedIn = false;
     });
-
 
     if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
@@ -393,13 +392,13 @@ export class CalendarComponent implements OnInit {
 
   hasSelectedAnyExtras() {
     return this.hasBedSheets
-        || this.hasTowels
-        || this.hasCleaning
-        || this.hasBreakfast
-        || this.hasLunch
-        || this.hasDinner
-        || this.hasParking
-        || this.hasWifi
-        || this.hasSafe;
+      || this.hasTowels
+      || this.hasCleaning
+      || this.hasBreakfast
+      || this.hasLunch
+      || this.hasDinner
+      || this.hasParking
+      || this.hasWifi
+      || this.hasSafe;
   }
 }
