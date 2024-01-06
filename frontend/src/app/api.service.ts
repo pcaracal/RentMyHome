@@ -39,11 +39,11 @@ export class ApiService {
     }[] = [];
 
     this.http.get(this._apiUrl + '/bookings/' + id).subscribe(
-      (data: any) => {
-        for (let booking of data) {
-          bookings.push(booking);
+        (data: any) => {
+          for (let booking of data) {
+            bookings.push(booking);
+          }
         }
-      }
     )
 
     return bookings;
@@ -85,5 +85,43 @@ export class ApiService {
       }
     };
     return this.http.get(this._apiUrl + '/verify', httpOptions);
+  }
+
+  postBookingExtras(booking_id: number,
+                    stripe_token_id: string,
+                    payment_amount: number,
+                    has_bedsheets: boolean,
+                    has_towels: boolean,
+                    has_cleaning: boolean,
+                    has_breakfast: boolean,
+                    has_lunch: boolean,
+                    has_dinner: boolean,
+                    has_parking: boolean,
+                    has_wifi: boolean,
+                    has_safe: boolean) {
+
+    const body = {
+      booking_id: booking_id,
+      user_id: 0,
+      stripe_token_id: stripe_token_id,
+      payment_amount: payment_amount,
+      has_bedsheets: has_bedsheets,
+      has_towels: has_towels,
+      has_cleaning: has_cleaning,
+      has_breakfast: has_breakfast,
+      has_lunch: has_lunch,
+      has_dinner: has_dinner,
+      has_parking: has_parking,
+      has_wifi: has_wifi,
+      has_safe: has_safe,
+    }
+
+    const httpOptions = {
+      headers: {
+        'Authorization': 'Bearer ' + this.bearerToken,
+        'Content-Type': 'application/json'
+      }
+    };
+    return this.http.post(this._apiUrl + '/booking_extras', body, httpOptions);
   }
 }
