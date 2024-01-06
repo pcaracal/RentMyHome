@@ -192,3 +192,19 @@ pub fn get_booking_extras(booking_id: i32, token: Token) -> (Status, Option<Json
 
     booking_extras
 }
+
+#[get("/api/bookings")]
+pub fn get_user_bookings(token: Token) -> (Status, Option<Json<Vec<Booking>>>) {
+    let mut connection = backend::establish_connection();
+
+    let user_id = auth::decode_token(token.0);
+
+    let bookings = match schema::booking::table
+        .filter(schema::booking::user_id.eq(user_id))
+        .load::<Booking>(&mut connection) {
+        Ok(bookings) => (Status::Ok, Some(Json(bookings))),
+        Err(_) => return (Status::InternalServerError, None),
+    };
+
+    bookings
+}

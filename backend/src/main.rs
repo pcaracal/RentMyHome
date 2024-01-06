@@ -21,5 +21,6 @@ fn rocket() -> _ {
                                            routes::get_verify,
                                            routes::post_booking_extras,
                                            routes::get_booking_extras,
+                                           routes::get_user_bookings,
                                        ])
 }

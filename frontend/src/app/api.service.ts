@@ -39,11 +39,11 @@ export class ApiService {
     }[] = [];
 
     this.http.get(this._apiUrl + '/bookings/' + id).subscribe(
-        (data: any) => {
-          for (let booking of data) {
-            bookings.push(booking);
-          }
+      (data: any) => {
+        for (let booking of data) {
+          bookings.push(booking);
         }
+      }
     )
 
     return bookings;
@@ -123,5 +123,25 @@ export class ApiService {
       }
     };
     return this.http.post(this._apiUrl + '/booking_extras', body, httpOptions);
+  }
+
+  get_user_bookings() {
+    const httpOptions = {
+      headers: {
+        'Authorization': 'Bearer ' + this.bearerToken,
+        'Content-Type': 'application/json'
+      }
+    };
+    return this.http.get(this._apiUrl + '/bookings', httpOptions);
+  }
+
+  get_booking_extras(booking_id: number) {
+    const httpOptions = {
+      headers: {
+        'Authorization': 'Bearer ' + this.bearerToken,
+        'Content-Type': 'application/json'
+      }
+    };
+    return this.http.get(this._apiUrl + '/booking_extras/' + booking_id, httpOptions);
   }
 }
