@@ -186,12 +186,12 @@ export class CalendarComponent implements OnInit {
 
   setCalendarData() {
     let today = new Date();
-    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() - 6);
+    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() +1);
     let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
 
     this.calendarData.days = [];
-    this.calendarData.month = start.toLocaleString('default', {month: 'long'});
-    this.calendarData.year = start.getFullYear();
+    this.calendarData.month = today.toLocaleString('default', {month: 'long'});
+    this.calendarData.year = today.getFullYear();
 
     let day = start;
     while (day <= end) {
@@ -213,7 +213,6 @@ export class CalendarComponent implements OnInit {
   isBooked(day: Date) {
     for (let booking of this.bookings) {
       let start = new Date(booking.start_date);
-      start.setDate(start.getDate() - 1);
       let end = new Date(booking.end_date);
       if (day >= start && day <= end) {
         return true;
@@ -225,8 +224,8 @@ export class CalendarComponent implements OnInit {
   isToday(day: Date) {
     let today = new Date();
     return day.getDate() === today.getDate() &&
-        day.getMonth() === today.getMonth() &&
-        day.getFullYear() === today.getFullYear();
+      day.getMonth() === today.getMonth() &&
+      day.getFullYear() === today.getFullYear();
   }
 
   isPast(day: Date) {
@@ -255,7 +254,6 @@ export class CalendarComponent implements OnInit {
     }, (error: any) => {
       this.isLoggedIn = false;
     });
-
 
     if (this.isBooked(new Date(this.calendarData.year, month, day))) {
       return;
@@ -297,6 +295,7 @@ export class CalendarComponent implements OnInit {
     for (let booking of this.bookings) {
       let start = new Date(booking.start_date);
       start.setDate(start.getDate() - 1);
+      start.setHours(1, 0, 0, 0);
       if (start > fromDate && (nextBooking == null || start < nextBooking)) {
         nextBooking = start;
       }
@@ -393,13 +392,13 @@ export class CalendarComponent implements OnInit {
 
   hasSelectedAnyExtras() {
     return this.hasBedSheets
-        || this.hasTowels
-        || this.hasCleaning
-        || this.hasBreakfast
-        || this.hasLunch
-        || this.hasDinner
-        || this.hasParking
-        || this.hasWifi
-        || this.hasSafe;
+      || this.hasTowels
+      || this.hasCleaning
+      || this.hasBreakfast
+      || this.hasLunch
+      || this.hasDinner
+      || this.hasParking
+      || this.hasWifi
+      || this.hasSafe;
   }
 }
