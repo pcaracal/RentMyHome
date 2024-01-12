@@ -1,0 +1,78 @@
+.calendar {
+  overflow-y: scroll;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .x-button {
+      cursor: pointer;
+
+      &:hover {
+        color: #89b4fa;
+        transform: scale(1.2);
+        transition: 0.1s ease-in-out;
+      }
+
+      &:not(:hover) {
+        transition: 0.1s ease-in-out;
+      }
+    }
+  }
+
+  table {
+    text-align: center;
+
+    span {
+      font-family: "JetBrainsMono NF ExtraBold", monospace;
+    }
+  }
+
+
+  .date-booked {
+    span {
+      color: #f38ba8 !important;
+    }
+  }
+
+  .date-available {
+    &:hover {
+      cursor: pointer;
+    }
+
+    span {
+      width: 100%;
+      color: #a8f38b !important;
+    }
+  }
+
+  .date-selected {
+    background-color: #585b70 !important;
+  }
+
+  .date-other-month {
+    span {
+      font-family: "JetBrainsMono NF ExtraLight", monospace !important;
+    }
+  }
+}
+
+.extras-price {
+  color: #eba0ac !important;
+}
+
+.price-text {
+  color: #eba0ac !important;
+}
+
+th {
+  font-weight: bold;
+}

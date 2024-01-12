@@ -1,15 +1,27 @@
-<div class="grid">
-  <article *ngFor="let home of homes" (click)="selectHome(home.id)">
-    <header>
-      {{home.name}}
-    </header>
-    <body>
-    <img src="{{home.image}}" alt="home image">
-    </body>
-    <footer>
-      <p>{{home.description}}</p>
-      <p class="username">{{users[home.fk_user_id - 1].name}}</p>
-      <p class="price">CHF {{home.price}} / Night</p>
-    </footer>
-  </article>
+<div>
+  <h1>The House</h1>
+  <div class="grid house-images">
+    <img draggable="false" src="https://cdn.pixabay.com/photo/2021/08/08/13/49/valley-6530966_1280.jpg"
+         alt="house image">
+    <img draggable="false" src="https://cdn.pixabay.com/photo/2021/05/18/07/32/mountains-6262535_1280.jpg" alt="house image">
+    <img draggable="false" src="https://cdn.pixabay.com/photo/2017/02/05/19/41/rustic-2041017_1280.jpg" alt="kitchen">
+    <img draggable="false" src="https://cdn.pixabay.com/photo/2020/02/17/11/17/fireplace-4856187_1280.jpg" alt="fireplace">
+  </div>
+</div>
+<div>
+  <h1>Rooms</h1>
+  <div class="grid">
+    <article *ngFor="let room of rooms" (click)="selectHome(room.id)">
+      <header>
+        {{ room.name }}
+      </header>
+      <body>
+      <img draggable="false" src="{{room.image}}" alt="room image">
+      </body>
+      <footer>
+        <p>{{ room.description }}</p>
+        <p class="price">CHF {{ room.price }} / Night</p>
+      </footer>
+    </article>
+  </div>
 </div>

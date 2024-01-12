@@ -1,1 +1,18 @@
-<p>login works!</p>
+<div class="container">
+  <article>
+    <header>
+      <h1>Login</h1>
+    </header>
+    <body>
+    <form (submit)="submitLogin()">
+      <input type="text" name="username" placeholder="Username" autocomplete="off" [(ngModel)]="username"
+             (ngModelChange)="usernameChange()" [attr.aria-invalid]="usernameInvalid">
+      <input type="password" name="password" placeholder="Password" autocomplete="off" [(ngModel)]="password"
+             (ngModelChange)="passwordChange()" [attr.aria-invalid]="passwordInvalid">
+
+      <button class="outline" type="submit">Login</button>
+      <button class="outline" type="button" (click)="submitRegister()">Register</button>
+    </form>
+    </body>
+  </article>
+</div>

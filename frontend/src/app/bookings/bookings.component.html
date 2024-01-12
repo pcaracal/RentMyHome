@@ -1,0 +1,113 @@
+<div class="container">
+  <h1>Your Bookings</h1>
+  <article *ngFor="let booking of bookings">
+    <header>
+      <h2>Room {{ booking.room_id }}</h2>
+      <strong><span class="highlight">{{ booking.start_date }}</span> - <span
+        class="highlight">{{ booking.end_date }}</span></strong>
+    </header>
+    <body>
+    <table>
+      <thead>
+      <tr>
+        <th>Days</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>{{ booking.amount_of_days }}</td>
+        <td>{{ booking.amount_of_days }} * 50 CHF</td>
+        <td>
+          <strong><span
+            class="highlight">{{ 50 * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+      </tbody>
+      <thead *ngIf="booking.has_extras">
+      <tr>
+        <th colspan="3">Extra</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="booking.has_extras">
+      <tr *ngIf="booking.booking_extras.has_bedsheets">
+        <td>Bedsheets</td>
+        <td>{{ booking.amount_of_days }} * {{ bedSheetsPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ bedSheetsPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_towels">
+        <td>Towels</td>
+        <td>{{ booking.amount_of_days }} * {{ towelsPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ towelsPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_cleaning">
+        <td>Cleaning</td>
+        <td>{{ booking.amount_of_days }} * {{ cleaningPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ cleaningPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_breakfast">
+        <td>Breakfast</td>
+        <td>{{ booking.amount_of_days }} * {{ breakfastPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ breakfastPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_lunch">
+        <td>Lunch</td>
+        <td>{{ booking.amount_of_days }} * {{ lunchPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ lunchPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_dinner">
+        <td>Dinner</td>
+        <td>{{ booking.amount_of_days }} * {{ dinnerPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ dinnerPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_parking">
+        <td>Parking</td>
+        <td>{{ booking.amount_of_days }} * {{ parkingPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ parkingPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_wifi">
+        <td>Wifi</td>
+        <td>{{ booking.amount_of_days }} * {{ wifiPrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ wifiPrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      <tr *ngIf="booking.booking_extras.has_safe">
+        <td>Safe</td>
+        <td>{{ booking.amount_of_days }} * {{ safePrice }} CHF</td>
+        <td>
+          <strong><span class="highlight">{{ safePrice * booking.amount_of_days }} CHF</span></strong>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+    <strong>
+      Total: <span class="highlight">{{ booking.booking_extras.payment_amount }} CHF</span>
+    </strong>
+    </body>
+  </article>
+</div>

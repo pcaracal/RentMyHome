@@ -1,0 +1,212 @@
+<div class="calendar">
+  <div class="container">
+    <article>
+      <header class="calendar-header">
+        <h1>Select Date, Duration and Extras</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" height="2rem" viewBox="0 0 384 512" class="x-button"
+             (click)="closeCalendar()">
+          <path
+            d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"/>
+        </svg>
+      </header>
+      <body>
+      <div style="display: flex; justify-content: space-between">
+        <input style="width: 80%" type="range" min="1" [max]="maxAmountOfDays" [(ngModel)]="amountOfDays"
+               (change)="changeAmountOfDays($event)">
+        <span *ngIf="maxAmountOfDays > 1">{{ amountOfDays }} / {{ maxAmountOfDays }} Days</span>
+        <span *ngIf="maxAmountOfDays === 1">{{ amountOfDays }} / {{ maxAmountOfDays }} Day</span>
+      </div>
+      <table>
+        <thead>
+        <tr>
+          <th colspan="7"><h3>{{ calendarData.month }} {{ calendarData.year }}</h3>
+          </th>
+        </tr>
+        </thead>
+        <thead>
+        <tr>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let week of weeks">
+          <td *ngFor="let day of week.days"
+              [class]="isDayInSelection(day.dateMonth, day.dateDate) ? 'date-selected' : ''"
+              (click)="selectDate(day.dateYear, day.dateMonth, day.dateDate)">
+            <div [class]="day.booked || day.past ? 'date-booked' : 'date-available'">
+              <div [class]=" day.isOtherMonth ? 'date-other-month' : ''">
+              <span>
+                {{ day.date }}
+              </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <h3>Extras</h3>
+      <fieldset class="grid">
+        <div>
+          <label for="hasBedSheets">
+            <input type="checkbox" id="hasBedSheets" [(ngModel)]="hasBedSheets" (ngModelChange)="refreshTotalPrice()">
+            Bed Sheets
+            <span class="extras-price">+{{ bedSheetsPrice }} CHF</span>
+          </label>
+          <label for="hasTowels">
+            <input type="checkbox" id="hasTowels" [(ngModel)]="hasTowels" (ngModelChange)="refreshTotalPrice()">
+            Towels
+            <span class="extras-price">+{{ towelsPrice }} CHF</span>
+          </label>
+          <label for="hasCleaning">
+            <input type="checkbox" id="hasCleaning" [(ngModel)]="hasCleaning" (ngModelChange)="refreshTotalPrice()">
+            Cleaning
+            <span class="extras-price">+{{ cleaningPrice }} CHF</span>
+          </label>
+          <label for="hasBreakfast">
+            <input type="checkbox" id="hasBreakfast" [(ngModel)]="hasBreakfast" (ngModelChange)="refreshTotalPrice()">
+            Breakfast
+            <span class="extras-price">+{{ breakfastPrice }} CHF</span>
+          </label>
+          <label for="hasLunch">
+            <input type="checkbox" id="hasLunch" [(ngModel)]="hasLunch" (ngModelChange)="refreshTotalPrice()">
+            Lunch
+            <span class="extras-price">+{{ lunchPrice }} CHF</span>
+          </label>
+        </div>
+        <div>
+          <label for="hasDinner">
+            <input type="checkbox" id="hasDinner" [(ngModel)]="hasDinner" (ngModelChange)="refreshTotalPrice()">
+            Dinner
+            <span class="extras-price">+{{ dinnerPrice }} CHF</span>
+          </label>
+          <label for="hasParking">
+            <input type="checkbox" id="hasParking" [(ngModel)]="hasParking" (ngModelChange)="refreshTotalPrice()">
+            Parking
+            <span class="extras-price">+{{ parkingPrice }} CHF</span>
+          </label>
+          <label for="hasWifi">
+            <input type="checkbox" id="hasWifi" [(ngModel)]="hasWifi" (ngModelChange)="refreshTotalPrice()">
+            Wifi
+            <span class="extras-price">+{{ wifiPrice }} CHF</span>
+          </label>
+          <label for="hasSafe">
+            <input type="checkbox" id="hasSafe" [(ngModel)]="hasSafe" (ngModelChange)="refreshTotalPrice()">
+            Safe
+            <span class="extras-price">+{{ safePrice }} CHF</span>
+          </label>
+        </div>
+      </fieldset>
+      </body>
+    </article>
+
+    <article *ngIf="hasSelectedDate && isLoggedIn">
+      <header>
+        <h1>Payment</h1>
+      </header>
+      <body>
+      <table>
+        <thead>
+        <tr>
+          <th>Start Date</th>
+          <th>Amount of days</th>
+          <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><strong>
+            {{
+              selectedDate
+            }}.{{
+              selectedMonth + 1 != 13 ?
+                selectedMonth + 1 : selectedMonth - 11
+            }}.{{
+              selectedYear
+            }}
+          </strong></td>
+          <td><strong>{{ amountOfDays }}</strong></td>
+          <td><strong class="price-text">{{ amountOfDays * 50 }} CHF</strong></td>
+      </table>
+
+      <table *ngIf="hasSelectedAnyExtras()">
+        <thead>
+        <tr>
+          <th>Extras</th>
+          <th>Calculation</th>
+          <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngIf="hasBedSheets">
+          <td>Bed Sheets</td>
+          <td>{{ amountOfDays }} * {{ bedSheetsPrice }} CHF</td>
+          <td><strong class="price-text">{{ bedSheetsPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasTowels">
+          <td>Towels</td>
+          <td>{{ amountOfDays }} * {{ towelsPrice }} CHF</td>
+          <td><strong class="price-text">{{ towelsPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasCleaning">
+          <td>Cleaning</td>
+          <td>{{ amountOfDays }} * {{ cleaningPrice }} CHF</td>
+          <td><strong class="price-text">{{ cleaningPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasBreakfast">
+          <td>Breakfast</td>
+          <td>{{ amountOfDays }} * {{ breakfastPrice }} CHF</td>
+          <td><strong class="price-text">{{ breakfastPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasLunch">
+          <td>Lunch</td>
+          <td>{{ amountOfDays }} * {{ lunchPrice }} CHF</td>
+          <td><strong class="price-text">{{ lunchPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasDinner">
+          <td>Dinner</td>
+          <td>{{ amountOfDays }} * {{ dinnerPrice }} CHF</td>
+          <td><strong class="price-text">{{ dinnerPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasParking">
+          <td>Parking</td>
+          <td>{{ amountOfDays }} * {{ parkingPrice }} CHF</td>
+          <td><strong class="price-text">{{ parkingPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasWifi">
+          <td>Wifi</td>
+          <td>{{ amountOfDays }} * {{ wifiPrice }} CHF</td>
+          <td><strong class="price-text">{{ wifiPrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        <tr *ngIf="hasSafe">
+          <td>Safe</td>
+          <td>{{ amountOfDays }} * {{ safePrice }} CHF</td>
+          <td><strong class="price-text">{{ safePrice * amountOfDays }} CHF</strong></td>
+        </tr>
+        </tbody>
+
+      </table>
+
+      <strong>Total price:<span class="price-text"> {{ totalPrice }} CHF</span></strong>
+      </body>
+      <footer>
+        <button (click)="handleBook()">Book</button>
+      </footer>
+    </article>
+
+
+    <article *ngIf="!isLoggedIn && hasSelectedDate">
+      <header>
+        <h1>You have to log in to rent a room</h1>
+      </header>
+      <body>
+      <button class="outline" (click)="goToLogin()">Go to login</button>
+      </body>
+    </article>
+  </div>
+</div>

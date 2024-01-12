@@ -1,2 +1,58 @@
-<p>rent works!</p>
-<p>Rent id: {{rent_id}}</p>
+<app-calendar *ngIf="showCalendar"/>
+<h1>{{ rentData.name }}</h1>
+<hr>
+<div class="grid">
+  <div>
+    <img src="{{rentData.image}}" alt="rent image">
+  </div>
+  <div>
+    <h1>Information</h1>
+
+    <hr>
+    <strong>Description:</strong>
+    <p>{{ rentData.description }}</p>
+    <p style="text-align: justify">Indulge in the charm of our exclusive room at Sandcat AG Room Rental, offering a
+      delightful blend of
+      alpine coziness and picturesque surroundings. Crafted from warm wood, this room provides a rustic yet luxurious
+      retreat amidst the Swiss mountains.</p>
+
+    <p style="text-align: justify">Step through the door to discover a space adorned with wooden accents, creating a
+      cozy and inviting atmosphere.
+      The highlight of this room is undoubtedly the private balcony that opens up to <span class="highlight">captivating views of the pristine Swiss nature</span>.
+      Whether it's the tranquility of morning sunrises or the breathtaking hues of sunset, your balcony becomes a
+      personal haven to soak in the beauty of the surrounding landscape.</p>
+
+    <p style="text-align: justify">The chalet-cabin room is designed for comfort, featuring plush furnishings and
+      thoughtful details. As you unwind
+      in this serene setting, you'll find that every element of the room has been curated to enhance your stay. From the
+      snug bed to the well-appointed amenities, we prioritize your relaxation and enjoyment.</p>
+
+    <p style="text-align: justify">Immerse yourself in the magic of the Swiss mountains by reserving this unique room.
+      Perfect for a
+      romantic getaway or a peaceful retreat, it promises an experience that goes beyond accommodation – a stay that
+      becomes a cherished memory of your time in nature.</p>
+
+    <hr>
+    <p>Price: <span class="highlight">CHF {{ rentData.price }} / Night</span></p>
+
+    <div class="">
+      <button type="button" class="outline" [class.secondary]="isBooked()" (click)="clickRent()">
+        <strong style="display: flex; align-items: center; justify-content: space-between ">
+          Rent
+          <svg xmlns="http://www.w3.org/2000/svg" height="32" width="28" viewBox="0 0 448 512">
+            <path
+              d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"/>
+          </svg>
+        </strong>
+      </button>
+      <div *ngIf="isBooked()">
+        <p><span
+          class="highlight">This room is unavailable in the next days.</span>
+        </p>
+        <p><span
+          class="highlight">You can still rent it for a future date, or find another room.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
