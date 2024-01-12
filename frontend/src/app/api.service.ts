@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ApiService {
-  private _apiUrl = 'http://localhost:8000/api';
+  private _apiUrl = 'https://localhost:8000/api';
 
   constructor(private http: HttpClient) {
   }
@@ -39,11 +39,11 @@ export class ApiService {
     }[] = [];
 
     this.http.get(this._apiUrl + '/bookings/' + id).subscribe(
-      (data: any) => {
-        for (let booking of data) {
-          bookings.push(booking);
+        (data: any) => {
+          for (let booking of data) {
+            bookings.push(booking);
+          }
         }
-      }
     )
 
     return bookings;
