@@ -63,7 +63,8 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  totalPrice: number = 0;
+  totalPrice: number = 50;
+  roomPrice: number = 50;
 
   // extras
   hasBedSheets: boolean = false;
@@ -138,6 +139,16 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.apiService.getRooms().pipe().subscribe((data: any) => {
+      data.forEach((room: { description: string, id: number, name: string, price: number }) => {
+        if (room.id === this.rentId) {
+          this.roomPrice = room.price;
+          this.totalPrice = this.roomPrice;
+        }
+      })
+    });
+
+
     this.apiService.getVerify().subscribe((data: any) => {
       this.isLoggedIn = true;
     }, (error: any) => {
@@ -186,7 +197,7 @@ export class CalendarComponent implements OnInit {
 
   setCalendarData() {
     let today = new Date();
-    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() +1);
+    let start = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
     let end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 35 - today.getDay());
 
     this.calendarData.days = [];
@@ -224,8 +235,8 @@ export class CalendarComponent implements OnInit {
   isToday(day: Date) {
     let today = new Date();
     return day.getDate() === today.getDate() &&
-      day.getMonth() === today.getMonth() &&
-      day.getFullYear() === today.getFullYear();
+        day.getMonth() === today.getMonth() &&
+        day.getFullYear() === today.getFullYear();
   }
 
   isPast(day: Date) {
@@ -386,19 +397,19 @@ export class CalendarComponent implements OnInit {
     }
 
     if (this.hasSelectedDate) {
-      this.totalPrice += this.amountOfDays * 50;
+      this.totalPrice += this.amountOfDays * this.roomPrice;
     }
   }
 
   hasSelectedAnyExtras() {
     return this.hasBedSheets
-      || this.hasTowels
-      || this.hasCleaning
-      || this.hasBreakfast
-      || this.hasLunch
-      || this.hasDinner
-      || this.hasParking
-      || this.hasWifi
-      || this.hasSafe;
+        || this.hasTowels
+        || this.hasCleaning
+        || this.hasBreakfast
+        || this.hasLunch
+        || this.hasDinner
+        || this.hasParking
+        || this.hasWifi
+        || this.hasSafe;
   }
 }

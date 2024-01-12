@@ -8,17 +8,14 @@ create table 'room'
     'image'       text    not null
 );
 
-insert into 'room' ('name', 'description', 'price', 'image')
-values ('Room 1', 'Room 1 description', 100, 'https://http.cat/100.jpg');
+INSERT INTO 'room' ('name', 'description', 'price', 'image')
+VALUES ('Room 1', 'Spacious with balcony, offering stunning mountain views.', 150,
+        'https://cdn.pixabay.com/photo/2013/03/23/04/29/master-bedroom-96086_1280.jpg');
 
-insert into 'room' ('name', 'description', 'price', 'image')
-values ('Room 2', 'Room 2 description', 200, 'https://http.cat/101.jpg');
+INSERT INTO 'room' ('name', 'description', 'price', 'image')
+VALUES ('Room 2', 'Compact room ideal for short stays.', 50,
+        'https://cdn.pixabay.com/photo/2014/08/08/22/14/cabin-413770_1280.jpg');
 
-insert into 'room' ('name', 'description', 'price', 'image')
-values ('Room 3', 'Room 3 description', 300, 'https://http.cat/102.jpg');
-
-insert into 'room' ('name', 'description', 'price', 'image')
-values ('Room 4', 'Room 4 description', 400, 'https://http.cat/200.jpg');
-
-insert into 'room' ('name', 'description', 'price', 'image')
-values ('Room 5', 'Room 5 description', 500, 'https://http.cat/201.jpg');
+INSERT INTO 'room' ('name', 'description', 'price', 'image')
+VALUES ('Room 3', 'Spacious and bright, surrounded by nature through many windows.', 125,
+        'https://cdn.pixabay.com/photo/2017/04/12/18/59/log-home-2225414_1280.jpg');

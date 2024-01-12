@@ -18,6 +18,7 @@ import {filter} from "rxjs";
 export class RentComponent implements OnInit {
   rent_id: number = -1;
   showCalendar: boolean = false;
+  is_booked: boolean = false;
 
   rentData: {
     id: number,
@@ -49,24 +50,28 @@ export class RentComponent implements OnInit {
     this.rent_id = parseInt(url[id + 1]);
 
     this.apiService.getRooms().subscribe(
-      (data: any) => {
-        for (let room of data) {
-          if (room.id === this.rent_id) {
-            this.rentData = room;
-            break;
+        (data: any) => {
+          for (let room of data) {
+            if (room.id === this.rent_id) {
+              this.rentData = room;
+              break;
+            }
           }
         }
-      }
     )
 
 
-    this.bookings = this.apiService.getBookingsSync(this.rent_id);
-
+    this.apiService.getBookings(this.rent_id).pipe().subscribe(
+        (data: any) => {
+          this.bookings = data;
+          console.log(this.bookings)
+        }
+    );
 
     this.showCalendar = url.pop() === 'calendar';
 
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+        filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       const url = this.router.url.split('/');
       const id = url.indexOf('calendar');
@@ -76,10 +81,11 @@ export class RentComponent implements OnInit {
 
   isBooked() {
     for (let booking of this.bookings) {
-      let start = new Date(booking.start_date);
-      let end = new Date(booking.end_date);
-      let today = new Date();
-      if (today >= start && today <= end) {
+      const start = new Date(booking.start_date);
+      const end = new Date(booking.end_date);
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      if (tomorrow >= start && tomorrow <= end) {
         return true;
       }
     }

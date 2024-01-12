@@ -9,12 +9,33 @@
     <h1>Information</h1>
 
     <hr>
-    <p>Description: {{ rentData.description }}</p>
+    <strong>Description:</strong>
+    <p>{{ rentData.description }}</p>
+    <p style="text-align: justify">Indulge in the charm of our exclusive room at Sandcat AG Room Rental, offering a
+      delightful blend of
+      alpine coziness and picturesque surroundings. Crafted from warm wood, this room provides a rustic yet luxurious
+      retreat amidst the Swiss mountains.</p>
+
+    <p style="text-align: justify">Step through the door to discover a space adorned with wooden accents, creating a
+      cozy and inviting atmosphere.
+      The highlight of this room is undoubtedly the private balcony that opens up to <span class="highlight">captivating views of the pristine Swiss nature</span>.
+      Whether it's the tranquility of morning sunrises or the breathtaking hues of sunset, your balcony becomes a
+      personal haven to soak in the beauty of the surrounding landscape.</p>
+
+    <p style="text-align: justify">The chalet-cabin room is designed for comfort, featuring plush furnishings and
+      thoughtful details. As you unwind
+      in this serene setting, you'll find that every element of the room has been curated to enhance your stay. From the
+      snug bed to the well-appointed amenities, we prioritize your relaxation and enjoyment.</p>
+
+    <p style="text-align: justify">Immerse yourself in the magic of the Swiss mountains by reserving this unique room.
+      Perfect for a
+      romantic getaway or a peaceful retreat, it promises an experience that goes beyond accommodation – a stay that
+      becomes a cherished memory of your time in nature.</p>
 
     <hr>
-    <p>Price: {{ rentData.price }}</p>
+    <p>Price: <span class="highlight">CHF {{ rentData.price }} / Night</span></p>
 
-    <div class="grid">
+    <div class="">
       <button type="button" class="outline" [class.secondary]="isBooked()" (click)="clickRent()">
         <strong style="display: flex; align-items: center; justify-content: space-between ">
           Rent
@@ -24,6 +45,14 @@
           </svg>
         </strong>
       </button>
+      <div *ngIf="isBooked()">
+        <p><span
+          class="highlight">This room is unavailable in the next days.</span>
+        </p>
+        <p><span
+          class="highlight">You can still rent it for a future date, or find another room.</span>
+        </p>
+      </div>
     </div>
   </div>
 </div>

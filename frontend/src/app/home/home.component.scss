@@ -37,3 +37,18 @@ div.grid {
     }
   }
 }
+
+div.house-images {
+  img {
+    margin-top: 1rem;
+
+    &:hover {
+      transform: scale(1.025);
+      transition: 0.15s ease-in-out;
+    }
+
+    &:not(hover) {
+      transition: 0.15s ease-in-out;
+    }
+  }
+}
